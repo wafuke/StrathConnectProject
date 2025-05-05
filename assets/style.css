@@ -1,0 +1,267 @@
+/* ===== Root Variables ===== */
+:root {
+    --strath-blue: #003366;
+    --strath-gold: #FFCC00;
+    --light-gold: #FFD700;
+    --white: #FFFFFF;
+    --black: #333333;
+}
+
+/* ===== Global Styles ===== */
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+/* ===== Navbar Styles ===== */
+.navbar {
+    background-color: var(--strath-blue);
+    color: var(--white);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--white);
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links a {
+    color: var(--white);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.nav-links a:hover {
+    background-color: var(--strath-gold);
+    color: var(--black);
+}
+
+.login-btn {
+    background-color: var(--strath-gold);
+    color: var(--black) !important;
+    font-weight: bold !important;
+}
+
+.login-btn:hover {
+    background-color: var(--light-gold) !important;
+}
+
+/* ===== Auth Page Styles ===== */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 120px);
+    padding: 2rem;
+    background-color: #f5f7fa;
+}
+
+.auth-card {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 51, 102, 0.1);
+    width: 100%;
+    max-width: 450px;
+}
+
+.auth-card h1 {
+    color: #003366;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.auth-subtitle {
+    color: #666;
+    margin-bottom: 2rem;
+    font-weight: 500;
+}
+
+.auth-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.auth-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #003366;
+    font-weight: 600;
+}
+
+.auth-form input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    transition: border 0.3s;
+}
+
+.auth-form input:focus {
+    outline: none;
+    border-color: #003366;
+}
+
+.forgot-password {
+    display: block;
+    text-align: right;
+    margin-top: 0.5rem;
+    color: #666;
+    font-size: 0.9rem;
+    text-decoration: none;
+}
+
+.forgot-password:hover {
+    color: #003366;
+}
+
+.auth-btn {
+    width: 100%;
+    padding: 14px;
+    background-color: #003366;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.auth-btn:hover {
+    background-color: #004080;
+}
+
+.auth-footer {
+    margin-top: 1.5rem;
+    text-align: center;
+    color: #666;
+}
+
+.auth-footer a {
+    color: #003366;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/* ===== Signup Specific Styles ===== */
+.password-wrapper {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    user-select: none;
+}
+
+.password-strength {
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.strength-bar {
+    height: 4px;
+    flex: 1;
+    background: #ddd;
+    border-radius: 2px;
+    transition: all 0.3s;
+}
+
+.strength-text {
+    font-size: 0.8rem;
+    color: #666;
+    margin-left: 8px;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    margin: 1.5rem 0;
+}
+
+.checkbox-group input {
+    width: auto;
+    margin-right: 10px;
+}
+
+.checkbox-group label {
+    font-weight: normal;
+    margin-bottom: 0;
+}
+
+.input-hint {
+    font-size: 0.8rem;
+    color: #666;
+    display: block;
+    margin-top: 4px;
+}
+
+/* Password strength indicators */
+.strength-bar.active {
+    background: #FFCC00;
+}
+
+.strength-bar.strong {
+    background: #4CAF50;
+}
+
+/* ===== User Type Select Styles ===== */
+.user-type-select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    background-color: white;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1em;
+}
+
+.user-type-select:focus {
+    outline: none;
+    border-color: #003366;
+}
+
+/* ===== Footer Styles ===== */
+.footer {
+    background-color: var(--strath-blue);
+    color: var(--white);
+    text-align: center;
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+
+.footer p {
+    margin: 0;
+}
