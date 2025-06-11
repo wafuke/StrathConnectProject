@@ -1,0 +1,5 @@
+Homepage(do afterwards)
+Login/signup
+Forms: Add product, 
+Admin: Dashboard, Seller Dashboard
+Functionalities: Add to cart, checkout, search Functionalities, rating and reviews.

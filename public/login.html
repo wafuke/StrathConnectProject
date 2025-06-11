@@ -8,7 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/style.css">
- 
 </head>
 <body>
     <!-- Navbar (consistent across all pages) -->
@@ -28,15 +27,21 @@
             <h1>Welcome Back</h1>
             <p class="auth-subtitle">Login to your Strath Connect account</p>
             
-            <form class="auth-form">
+            <?php if (isset($_SESSION['login_error'])): ?>
+                <div class="error-message" style="color: red; margin-bottom: 1rem;">
+                    <?php echo $_SESSION['login_error']; unset($_SESSION['login_error']); ?>
+                </div>
+            <?php endif; ?>
+            
+            <form class="auth-form" action="../database/login_process.php" method="POST">
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" placeholder="student@strathmore.edu" required>
+                    <input type="email" id="email" name="email" placeholder="student@strathmore.edu" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" placeholder="••••••••" required>
+                    <input type="password" id="password" name="password" placeholder="••••••••" required>
                     <a href="#" class="forgot-password">Forgot password?</a>
                 </div>
                 
@@ -53,7 +58,5 @@
     <footer class="footer">
         <p>&copy; 2023 Strath Connect. All rights reserved.</p>
     </footer>
-
-    
 </body>
 </html>

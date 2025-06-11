@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buyer Dashboard - StrathConnect</title>
+    <link rel="stylesheet" href="../assets/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">StrathConnect</div>
+        <ul class="nav-links">
+            <li><a href="../public/index.html">Home</a></li>
+            <li><a href="marketplace.html">Marketplace</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="buyer_orders.html">My Orders</a></li>
+            <li><a href="buyer_messages.html">Messages</a></li>
+            <li><a href="../public/login.html">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="profile-summary">
+                <img src="../assets/images/profile-placeholder.png" alt="Profile" class="profile-pic">
+                <h3>Buyer Name</h3>
+                <p>@username</p>
+                <div class="wallet-balance">
+                    <i class="fas fa-wallet"></i> KSh 1,250
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="buyer_dashboard.html" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a href="marketplace.html"><i class="fas fa-store"></i> Marketplace</a>
+                <a href="services.html"><i class="fas fa-concierge-bell"></i> Services</a>
+                <a href="buyer_orders.html"><i class="fas fa-shopping-bag"></i> My Orders</a>
+                <a href="buyer_messages.html"><i class="fas fa-envelope"></i> Messages</a>
+                <a href="buyer_wishlist.html"><i class="fas fa-heart"></i> Wishlist</a>
+                <a href="buyer_settings.html"><i class="fas fa-cog"></i> Settings</a>
+            </nav>
+        </aside>
+
+        <main class="dashboard-content">
+            <h1>Welcome Back, Buyer!</h1>
+            
+            <section class="search-section">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search for products or services...">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+                <div class="search-filters">
+                    <select>
+                        <option>All Categories</option>
+                        <option>Books</option>
+                        <option>Electronics</option>
+                        <option>Clothing</option>
+                        <option>Furniture</option>
+                        <option>Other</option>
+                    </select>
+                    <select>
+                        <option>Sort By</option>
+                        <option>Price: Low to High</option>
+                        <option>Price: High to Low</option>
+                        <option>Newest</option>
+                        <option>Most Popular</option>
+                    </select>
+                </div>
+            </section>
+
+            <section class="featured-products">
+                <h2>Recommended for You</h2>
+                <div class="products-grid">
+                    <div class="product-card">
+                        <img src="../assets/images/product-placeholder.jpg" alt="Product">
+                        <h3>Used Textbooks - Business</h3>
+                        <div class="price">KSh 800</div>
+                        <div class="seller-info">
+                            <img src="../assets/images/profile-placeholder.png" alt="Seller">
+                            <span>@johndoe</span>
+                        </div>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                    <!-- More product cards would go here -->
+                </div>
+            </section>
+
+            <section class="featured-services">
+                <h2>Popular Services</h2>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <img src="../assets/images/service-placeholder.jpg" alt="Service">
+                        <h3>Math Tutoring</h3>
+                        <div class="rate">KSh 500/hr</div>
+                        <div class="seller-info">
+                            <img src="../assets/images/profile-placeholder.png" alt="Seller">
+                            <span>@mathwizard</span>
+                        </div>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span>(15)</span>
+                        </div>
+                        <button class="book-service">Book Now</button>
+                    </div>
+                    <!-- More service cards would go here -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2023 StrathConnect. All rights reserved.</p>
+    </footer>
+</body>
+</html>
