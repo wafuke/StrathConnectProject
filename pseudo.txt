@@ -1,5 +1,16 @@
 Homepage(do afterwards)
-Login/signup
-Forms: Add product, 
-Admin: Dashboard, Seller Dashboard
+Login/signup ( set database to ensure that you can only have 1 admin )
+Forms: Add product( specify if it is a product or service functionality)
+AdminDashboard, Seller Dashboard, buyer dashboard 
 Functionalities: Add to cart, checkout, search Functionalities, rating and reviews.
+Admin Dashboard contains: Approve listings, Analytics, Remove User From System
+Seller Dashboard contains: MyProducts( products of that particular user), MyServices (products of that particular user), Orders received.
+Buyer Dashboard contains: View of the marketplace, Orders, Wishlist .
+
+Database Schema:
+Users: Id, username, email, user_type, password
+Product: Id, Product_Id, Product_Category, Product_Image
+Services: Id, Services_Id, Service_Category
+Checkout Table: (research)
+
+
