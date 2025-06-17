@@ -9,8 +9,96 @@ Buyer Dashboard contains: View of the marketplace, Orders, Wishlist .
 
 Database Schema:
 Users: Id, username, email, user_type, password
-Product: Id, Product_Id, Product_Category, Product_Image
+Product: Id, Product_Id, Product_Category, Product_Image ,is_approved
 Services: Id, Services_Id, Service_Category
-Checkout Table: (research)
+Checkout Table: Orders: Id, User_Id, Product/Service_Id, Quantity, Total_Price, Status, Timestamp
+Payments: Id, Order_Id, Payment_Method, Amount, Status, Transaction_Id
+Reviews & Ratings Table:Reviews: Id, User_Id, Product/Service_Id, Rating, Comment, Timestamp
+Wishlist Table: Wishlist: Id, User_Id, Product/Service_Id, Timestamp
+
+
+Core Features (Must-Have)
+User Authentication
+
+Login & Signup (with email/password)
+
+Basic role system (admin, seller, buyer)
+
+Keep it simple: Use Firebase Auth or session-based login.
+
+Product Listings (Marketplace)
+
+Sellers can add products (name, price, image, category)
+
+Buyers can view all products in a grid/list
+
+Skip services for now unless absolutely required.
+
+Shopping Cart & Checkout
+
+Add/remove items from cart
+
+Basic checkout (mock payment, just save order to DB)
+No need for real payments (Stripe/PayPal) in a school project.
+
+Admin Panel (Basic)
+
+Approve/reject product listings
+
+View/delete users
+
+Analytics can be added later.
+
+Orders System
+
+Buyers see their orders
+
+Sellers see orders received
+
+Status: Pending, Shipped, Delivered (simple enum)
+
+Nice-to-Have (Do Later if Time Permits)
+Search & filters
+
+Wishlist
+
+Ratings & reviews
+
+Email notifications
+
+Fancy UI/animations
+
+Suggested Workflow
+Set up basic frontend 
+
+Build auth system 
+
+Create product CRUD 
+
+Implement cart + checkout 
+
+Add admin controls 
+
+Database Minimum Tables
+plaintext
+Users: id, email, password_hash, role (admin/seller/buyer)  
+Products: id, seller_id, name, price, image, is_approved  
+Orders: id, buyer_id, product_id, quantity, status (pending/delivered)  
+Tech Stack Suggestions (Simple Options)
+Frontend: React (Vite) / Vue.js / Plain HTML+JS
+
+Backend: Node.js (Express) / Python (Flask) / Firebase
+
+Database: SQLite (simple), PostgreSQL, or Firebase Firestore
+
+Auth: Firebase Auth, JWT, or session-based
+
+------------------------------------------------------------------------------------------
+
+Error Notes : 
+
+Project does not contain this file : "../includes/config.php"
+
+
 
 
