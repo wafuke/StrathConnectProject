@@ -1,3 +1,21 @@
+<?php
+// Start session and verify admin access
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../public/login.php");
+    exit();
+}
+// Database connection
+$host = 'localhost';
+$user = 'root';
+$pass = '';
+$db = 'strathconnect';
+
+$conn = new mysqli($host, $user, $pass, $db);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,12 +29,12 @@
     <nav class="navbar">
         <div class="logo">StrathConnect Admin</div>
         <ul class="nav-links">
-            <li><a href="admin_dashboard.html" class="active">Dashboard</a></li>
-            <li><a href="admin_users.html">Users</a></li>
-            <li><a href="admin_products.html">Products</a></li>
-            <li><a href="admin_services.html">Services</a></li>
-            <li><a href="admin_reports.html">Reports</a></li>
-            <li><a href="../public/login.html">Logout</a></li>
+            <li><a href="admin_dashboard.php" class="active">Dashboard</a></li>
+            <li><a href="admin_users.php">Users</a></li>
+            <li><a href="admin_products.php">Products</a></li>
+            <li><a href="admin_services.php">Services</a></li>
+            <li><a href="admin_reports.php">Reports</a></li>
+            <li><a href="../public/login.php">Logout</a></li>
         </ul>
     </nav>
 
@@ -28,13 +46,13 @@
                 <p>Administrator</p>
             </div>
             <nav class="sidebar-nav">
-                <a href="admin_dashboard.html" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-                <a href="admin_users.html"><i class="fas fa-users"></i> User Management</a>
-                <a href="admin_products.html"><i class="fas fa-box-open"></i> Product Management</a>
-                <a href="admin_services.html"><i class="fas fa-concierge-bell"></i> Service Management</a>
-                <a href="admin_orders.html"><i class="fas fa-shopping-cart"></i> Order Management</a>
-                <a href="admin_reports.html"><i class="fas fa-chart-bar"></i> Reports</a>
-                <a href="admin_settings.html"><i class="fas fa-cog"></i> System Settings</a>
+                <a href="admin_dashboard.php" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a href="admin_users.php"><i class="fas fa-users"></i> User Management</a>
+                <a href="admin_products.php"><i class="fas fa-box-open"></i> Product Management</a>
+                <a href="admin_services.php"><i class="fas fa-concierge-bell"></i> Service Management</a>
+                <a href="admin_orders.php"><i class="fas fa-shopping-cart"></i> Order Management</a>
+                <a href="admin_reports.php"><i class="fas fa-chart-bar"></i> Reports</a>
+                <a href="admin_settings.php"><i class="fas fa-cog"></i> System Settings</a>
             </nav>
         </aside>
 
@@ -100,13 +118,13 @@
             <section class="quick-actions">
                 <h2>Quick Actions</h2>
                 <div class="action-buttons">
-                    <button class="action-btn" onclick="location.href='admin_users.html'">
+                    <button class="action-btn" onclick="location.href='admin_users.php'">
                         <i class="fas fa-user-cog"></i> Manage Users
                     </button>
-                    <button class="action-btn" onclick="location.href='admin_products.html'">
+                    <button class="action-btn" onclick="location.href='admin_products.php'">
                         <i class="fas fa-boxes"></i> Review Products
                     </button>
-                    <button class="action-btn" onclick="location.href='admin_reports.html'">
+                    <button class="action-btn" onclick="location.href='admin_reports.php'">
                         <i class="fas fa-flag"></i> View Reports
                     </button>
                 </div>

@@ -1,3 +1,21 @@
+<?php
+// Start session and verify admin access
+session_start();
+if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'admin') {
+    header("Location: ../public/login.php");
+    exit();
+}
+// Database connection
+$host = 'localhost';
+$user = 'root';
+$pass = '';
+$db = 'strathconnect';
+
+$conn = new mysqli($host, $user, $pass, $db);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,12 +29,12 @@
     <nav class="navbar">
         <div class="logo">StrathConnect</div>
         <ul class="nav-links">
-            <li><a href="../public/index.html">Home</a></li>
-            <li><a href="marketplace.html">Marketplace</a></li>
-            <li><a href="services.html">Services</a></li>
-            <li><a href="buyer_orders.html">My Orders</a></li>
-            <li><a href="buyer_messages.html">Messages</a></li>
-            <li><a href="../public/login.html">Logout</a></li>
+            <li><a href="../public/index.php">Home</a></li>
+            <li><a href="marketplace.php">Marketplace</a></li>
+            <li><a href="services.php">Services</a></li>
+            <li><a href="buyer_orders.php">My Orders</a></li>
+            <li><a href="buyer_messages.php">Messages</a></li>
+            <li><a href="../public/login.php">Logout</a></li>
         </ul>
     </nav>
 
@@ -31,13 +49,13 @@
                 </div>
             </div>
             <nav class="sidebar-nav">
-                <a href="buyer_dashboard.html" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-                <a href="marketplace.html"><i class="fas fa-store"></i> Marketplace</a>
-                <a href="services.html"><i class="fas fa-concierge-bell"></i> Services</a>
-                <a href="buyer_orders.html"><i class="fas fa-shopping-bag"></i> My Orders</a>
-                <a href="buyer_messages.html"><i class="fas fa-envelope"></i> Messages</a>
-                <a href="buyer_wishlist.html"><i class="fas fa-heart"></i> Wishlist</a>
-                <a href="buyer_settings.html"><i class="fas fa-cog"></i> Settings</a>
+                <a href="buyer_dashboard.php" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a href="marketplace.php"><i class="fas fa-store"></i> Marketplace</a>
+                <a href="services.php"><i class="fas fa-concierge-bell"></i> Services</a>
+                <a href="buyer_orders.php"><i class="fas fa-shopping-bag"></i> My Orders</a>
+                <a href="buyer_messages.php"><i class="fas fa-envelope"></i> Messages</a>
+                <a href="buyer_wishlist.php"><i class="fas fa-heart"></i> Wishlist</a>
+                <a href="buyer_settings.php"><i class="fas fa-cog"></i> Settings</a>
             </nav>
         </aside>
 

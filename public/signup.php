@@ -1,3 +1,21 @@
+<?php
+// Start session and verify admin access
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../public/login.php");
+    exit();
+}
+// Database connection
+$host = 'localhost';
+$user = 'root';
+$pass = '';
+$db = 'strathconnect';
+
+$conn = new mysqli($host, $user, $pass, $db);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -59,7 +77,7 @@
       </form>
 
       <div class="auth-footer">
-        <p>Already have an account? <a href="../public/login.html">Login</a></p>
+        <p>Already have an account? <a href="../public/login.php">Login</a></p>
       </div>
     </div>
   </div>

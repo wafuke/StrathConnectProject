@@ -78,7 +78,7 @@ $sql = "INSERT INTO products (seller_id, name, category, description, price, ima
 
 if ($conn->query($sql) === TRUE) {
     $_SESSION['message'] = "Product added successfully!";
-    header("Location: seller_dashboard.php");
+    header("Location: ../public/seller_dashboard.php");
 } else {
     // Delete uploaded image if DB insert failed
     if (!empty($image_path)) {

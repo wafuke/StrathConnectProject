@@ -23,13 +23,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Basic validation
     if (empty($email)) {  // ✅ Fixed syntax error: missing closing parenthesis
         $_SESSION['login_error'] = "Email is required.";
-        header("Location: ../public/login.html");
+        header("Location: ../public/login.php");
         exit();
     }
 
     if (empty($password)) {
         $_SESSION['login_error'] = "Password is required.";
-        header("Location: ../public/login.html");
+        header("Location: ../public/login.php");
         exit();
     }
 
@@ -53,36 +53,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Redirect based on user type
             switch($user['user_type']) {
                 case 'admin':
-                    header("Location: ../public/admin_dashboard.html");
+                    header("Location: ../public/admin_dashboard.php");
                     break;
                 case 'seller':
-                    header("Location: ../public/seller_dashboard.html");
+                    header("Location: ../public/seller_dashboard.php");
                     break;
                 case 'buyer':
-                    header("Location: ../public/buyer_dashboard.html");
+                    header("Location: ../public/buyer_dashboard.php");
                     break;
                 default:
-                    header("Location: ../public/index.html");
+                    header("Location: ../public/index.php");
             }
             $stmt->close();
             $conn->close();
             exit();
         } else {
             $_SESSION['login_error'] = "Invalid email or password.";
-            header("Location: ../public/login.html");
+            header("Location: ../public/login.php");
             $stmt->close();
             $conn->close();
             exit();
         }
     } else {
         $_SESSION['login_error'] = "Invalid email or password.";
-        header("Location: ../public/login.html");
+        header("Location: ../public/login.php");
         $stmt->close();
         $conn->close();
         exit();
     }
 } else {
-    header("Location: ../public/login.html");
+    header("Location: ../public/login.php");
     exit();
 }
 ?>

@@ -12,6 +12,17 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'seller') {
     <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
+    <nav class="navbar">
+        <div class="logo">StrathConnect</div>
+        <ul class="nav-links">
+            <li><a href="../public/index.php">Home</a></li>
+            <li><a href="seller_dashboard.php" class="active">Dashboard</a></li>
+            <li><a href="seller_products.php">My Products</a></li>
+            <li><a href="seller_services.php">My Services</a></li>
+            <li><a href="seller_orders.php">Orders</a></li>
+            <li><a href="../public/login.php">Logout</a></li>
+        </ul>
+    </nav>
     <?php if (isset($_SESSION['error'])): ?>
         <div class="error"><?= $_SESSION['error']; unset($_SESSION['error']); ?></div>
     <?php endif; ?>

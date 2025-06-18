@@ -1,3 +1,21 @@
+<?php
+// Start session and verify admin access
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../public/login.php");
+    exit();
+}
+// Database connection
+$host = 'localhost';
+$user = 'root';
+$pass = '';
+$db = 'strathconnect';
+
+$conn = new mysqli($host, $user, $pass, $db);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,12 +29,12 @@
   <nav class="navbar">
     <div class="logo">StrathConnect</div>
     <ul class="nav-links">
-      <li><a href="../public/index.html">Home</a></li>
-      <li><a href="seller_dashboard.html">Dashboard</a></li>
-      <li><a href="seller_products.html">My Products</a></li>
-      <li><a href="seller_services.html">My Services</a></li>
-      <li><a href="seller_orders.html" class="active">Orders</a></li>
-      <li><a href="../public/login.html">Logout</a></li>
+      <li><a href="../public/index.php">Home</a></li>
+      <li><a href="seller_dashboard.php">Dashboard</a></li>
+      <li><a href="seller_products.php">My Products</a></li>
+      <li><a href="seller_services.php">My Services</a></li>
+      <li><a href="seller_orders.php" class="active">Orders</a></li>
+      <li><a href="../public/login.php">Logout</a></li>
     </ul>
   </nav>
 
@@ -28,12 +46,12 @@
         <p>@username</p>
       </div>
       <nav class="sidebar-nav">
-        <a href="seller_dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-        <a href="seller_products.html"><i class="fas fa-box-open"></i> My Products</a>
-        <a href="seller_services.html"><i class="fas fa-concierge-bell"></i> My Services</a>
-        <a href="seller_orders.html" class="active"><i class="fas fa-shopping-cart"></i> Orders</a>
-        <a href="seller_messages.html"><i class="fas fa-envelope"></i> Messages</a>
-        <a href="seller_settings.html"><i class="fas fa-cog"></i> Settings</a>
+        <a href="seller_dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="seller_products.php"><i class="fas fa-box-open"></i> My Products</a>
+        <a href="seller_services.php"><i class="fas fa-concierge-bell"></i> My Services</a>
+        <a href="seller_orders.php" class="active"><i class="fas fa-shopping-cart"></i> Orders</a>
+        <a href="seller_messages.php"><i class="fas fa-envelope"></i> Messages</a>
+        <a href="seller_settings.php"><i class="fas fa-cog"></i> Settings</a>
       </nav>
     </aside>
 

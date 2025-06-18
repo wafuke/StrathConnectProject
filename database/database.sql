@@ -39,3 +39,16 @@ CREATE TABLE IF NOT EXISTS categories (
 INSERT INTO categories (name) VALUES 
 ('Books'), ('Electronics'), ('Clothing'), 
 ('Furniture'), ('Services'), ('Other');
+
+CREATE TABLE services (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    seller_id INT NOT NULL,
+    title VARCHAR(100) NOT NULL,
+    category VARCHAR(50) NOT NULL,
+    description TEXT NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    rate_type ENUM('hourly','fixed','per_project') NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    is_approved BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (seller_id) REFERENCES users(id)
+);

@@ -1,3 +1,21 @@
+<?php
+// Start session and verify admin access
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../public/login.php");
+    exit();
+}
+// Database connection
+$host = 'localhost';
+$user = 'root';
+$pass = '';
+$db = 'strathconnect';
+
+$conn = new mysqli($host, $user, $pass, $db);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,12 +29,12 @@
     <nav class="navbar">
         <div class="logo">StrathConnect</div>
         <ul class="nav-links">
-            <li><a href="../public/index.html">Home</a></li>
-            <li><a href="seller_dashboard.html" class="active">Dashboard</a></li>
-            <li><a href="seller_products.html">My Products</a></li>
-            <li><a href="seller_services.html">My Services</a></li>
-            <li><a href="seller_orders.html">Orders</a></li>
-            <li><a href="../public/login.html">Logout</a></li>
+            <li><a href="../public/index.php">Home</a></li>
+            <li><a href="seller_dashboard.php" class="active">Dashboard</a></li>
+            <li><a href="seller_products.php">My Products</a></li>
+            <li><a href="seller_services.php">My Services</a></li>
+            <li><a href="seller_orders.php">Orders</a></li>
+            <li><a href="../public/login.php">Logout</a></li>
         </ul>
     </nav>
 
@@ -77,10 +95,10 @@
                     <button class="action-btn" onclick="location.href='../database/add_product.php'">
                         <i class="fas fa-plus-circle"></i> Add Product
                     </button>
-                    <button class="action-btn" onclick="location.href='add_service.html'">
+                    <button class="action-btn" onclick="location.href='add_service.php'">
                         <i class="fas fa-plus-circle"></i> Add Service
                     </button>
-                    <button class="action-btn" onclick="location.href='seller_orders.html'">
+                    <button class="action-btn" onclick="location.href='seller_orders.php'">
                         <i class="fas fa-clipboard-list"></i> View Orders
                     </button>
                 </div>

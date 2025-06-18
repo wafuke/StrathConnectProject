@@ -1,3 +1,15 @@
+<?php
+
+$host = 'localhost';
+$user = 'root';
+$pass = '';
+$db = 'strathconnect';
+
+$conn = new mysqli($host, $user, $pass, $db);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,10 +26,10 @@
     <nav class="navbar">
         <div class="logo">Strath Connect</div>
         <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="products.html">Products</a></li>
-            <li><a href="services.html">Services</a></li>
-            <li><a href="login.html" class="login-btn">Login</a></li>
+            <li><a href="index.php">Home</a></li>
+            <li><a href="products.php">Products</a></li>
+            <li><a href="services.php">Services</a></li>
+            <li><a href="login.php" class="login-btn">Login</a></li>
         </ul>
     </nav>
 
@@ -48,7 +60,7 @@
                 <button type="submit" class="auth-btn">Login</button>
                 
                 <div class="auth-footer">
-                    <p>Don't have an account? <a href="signup.html">Sign up</a></p>
+                    <p>Don't have an account? <a href="../public/signup.php">Sign up</a></p>
                 </div>
             </form>
         </div>

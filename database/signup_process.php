@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (!empty($errors)) {
         $_SESSION['signup_errors'] = $errors;
-        header("Location: ../public/signup.html");
+        header("Location: ../public/signup.php");
         exit();
     }
 
@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($check_result->num_rows > 0) {
         $_SESSION['signup_errors'] = ["Username or email already exists."];
-        header("Location: ../public/signup.html");
+        header("Location: ../public/signup.php");
         $check_stmt->close();
         $conn->close();
         exit();
@@ -80,18 +80,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->close();
         $check_stmt->close();
         $conn->close();
-        header("Location: ../public/login.html");
+        header("Location: ../public/login.php");
         exit();
     } else {
         $_SESSION['signup_errors'] = ["Error: " . $stmt->error];
         $stmt->close();
         $check_stmt->close();
         $conn->close();
-        header("Location: ../public/signup.html");
+        header("Location: ../public/signup.php");
         exit();
     }
 } else {
-    header("Location: ../public/signup.html");
+    header("Location: ../public/signup.php");
     exit();
 }
 ?>
