@@ -97,7 +97,7 @@ Auth: Firebase Auth, JWT, or session-based
 
 Error Notes : 
 
-Project does not contain this file : "../includes/config.php"
+
 
 
 

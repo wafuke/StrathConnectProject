@@ -1,7 +1,7 @@
 <?php
 // Start session and verify admin access
 session_start();
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['user_id'])|| $_SESSION['user_type'] !== 'seller') {
     header("Location: ../public/login.php");
     exit();
 }
@@ -54,12 +54,12 @@ if ($conn->connect_error) {
                 </div>
             </div>
             <nav class="sidebar-nav">
-                <a href="seller_dashboard.html" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-                <a href="seller_products.html"><i class="fas fa-box-open"></i> My Products</a>
-                <a href="seller_services.html"><i class="fas fa-concierge-bell"></i> My Services</a>
-                <a href="seller_orders.html"><i class="fas fa-shopping-cart"></i> Orders</a>
-                <a href="seller_messages.html"><i class="fas fa-envelope"></i> Messages</a>
-                <a href="seller_settings.html"><i class="fas fa-cog"></i> Settings</a>
+                <a href="seller_dashboard.php" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a href="seller_products.php"><i class="fas fa-box-open"></i> My Products</a>
+                <a href="seller_services.php"><i class="fas fa-concierge-bell"></i> My Services</a>
+                <a href="seller_orders.php"><i class="fas fa-shopping-cart"></i> Orders</a>
+                <a href="seller_messages.php"><i class="fas fa-envelope"></i> Messages</a>
+                <a href="seller_settings.php"><i class="fas fa-cog"></i> Settings</a>
             </nav>
         </aside>
 
