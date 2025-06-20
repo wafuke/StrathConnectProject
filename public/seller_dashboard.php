@@ -1,10 +1,10 @@
 <?php
-// Start session and verify admin access
 session_start();
-if (!isset($_SESSION['user_id'])|| $_SESSION['user_type'] !== 'seller') {
+if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'seller') {
     header("Location: ../public/login.php");
     exit();
 }
+
 // Database connection
 $host = 'localhost';
 $user = 'root';
@@ -15,7 +15,58 @@ $conn = new mysqli($host, $user, $pass, $db);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+
+// Initialize counts with default values
+$product_count = 0;
+$service_count = 0;
+$order_count = 0;
+$total_sales = "KSh 0";
+
+// Get seller stats
+$seller_id = $_SESSION['user_id'];
+
+try {
+    // Get product count
+    $product_query = "SELECT COUNT(*) as count FROM products WHERE seller_id = ?";
+    if ($stmt = $conn->prepare($product_query)) {
+        $stmt->bind_param("i", $seller_id);
+        $stmt->execute();
+        $product_result = $stmt->get_result();
+        $product_count = $product_result->fetch_assoc()['count'];
+        $stmt->close();
+    } else {
+        error_log("Failed to prepare product query: " . $conn->error);
+    }
+
+    // Get service count
+    $service_query = "SELECT COUNT(*) as count FROM services WHERE seller_id = ?";
+    if ($stmt = $conn->prepare($service_query)) {
+        $stmt->bind_param("i", $seller_id);
+        $stmt->execute();
+        $service_result = $stmt->get_result();
+        $service_count = $service_result->fetch_assoc()['count'];
+        $stmt->close();
+    } else {
+        error_log("Failed to prepare service query: " . $conn->error);
+    }
+
+    // Get order count (pending)
+    $order_query = "SELECT COUNT(*) as count FROM orders WHERE seller_id = ? AND status = 'pending'";
+    if ($stmt = $conn->prepare($order_query)) {
+        $stmt->bind_param("i", $seller_id);
+        $stmt->execute();
+        $order_result = $stmt->get_result();
+        $order_count = $order_result->fetch_assoc()['count'];
+        $stmt->close();
+    } else {
+        error_log("Failed to prepare order query: " . $conn->error);
+    }
+} catch (Exception $e) {
+    error_log("Database error: " . $e->getMessage());
+}
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,8 +93,8 @@ if ($conn->connect_error) {
         <aside class="sidebar">
             <div class="profile-summary">
                 <img src="../assets/images/profile-placeholder.png" alt="Profile" class="profile-pic">
-                <h3>Seller Name</h3>
-                <p>@username</p>
+                <h3><?php echo htmlspecialchars($_SESSION['username'] ?? 'Seller'); ?></h3>
+                <p>@<?php echo htmlspecialchars($_SESSION['username'] ?? 'username'); ?></p>
                 <div class="rating">
                     <i class="fas fa-star"></i>
                     <i class="fas fa-star"></i>
@@ -69,22 +120,22 @@ if ($conn->connect_error) {
             <div class="stats-grid">
                 <div class="stat-card">
                     <h3>Total Sales</h3>
-                    <p>KSh 24,500</p>
+                    <p><?php echo $total_sales; ?></p>
                     <i class="fas fa-wallet"></i>
                 </div>
                 <div class="stat-card">
                     <h3>Active Products</h3>
-                    <p>12</p>
+                    <p id="product-count"><?php echo $product_count; ?></p>
                     <i class="fas fa-boxes"></i>
                 </div>
                 <div class="stat-card">
                     <h3>Active Services</h3>
-                    <p>5</p>
+                    <p id="service-count"><?php echo $service_count; ?></p>
                     <i class="fas fa-tools"></i>
                 </div>
                 <div class="stat-card">
                     <h3>Pending Orders</h3>
-                    <p>3</p>
+                    <p id="order-count"><?php echo $order_count; ?></p>
                     <i class="fas fa-shopping-cart"></i>
                 </div>
             </div>
@@ -140,7 +191,39 @@ if ($conn->connect_error) {
     </div>
 
     <footer class="footer">
-        <p>&copy; 2023 StrathConnect. All rights reserved.</p>
+        <p>&copy; <?php echo date('Y'); ?> StrathConnect. All rights reserved.</p>
     </footer>
+
+    <script>
+    function updateCounts() {
+        fetch('get_seller_counts.php')
+            .then(response => response.json())
+            .then(data => {
+                // Update counts with animation
+                animateCountChange('product-count', data.product_count);
+                animateCountChange('service-count', data.service_count);
+                animateCountChange('order-count', data.order_count);
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function animateCountChange(elementId, newValue) {
+        const element = document.getElementById(elementId);
+        if (element.textContent !== newValue.toString()) {
+            element.classList.add('count-updating');
+            setTimeout(() => {
+                element.textContent = newValue;
+                element.classList.remove('count-updating');
+            }, 300);
+        }
+    }
+
+    // Update every 30 seconds
+    setInterval(updateCounts, 30000);
+    
+    // Also update when the page gains focus
+    window.addEventListener('focus', updateCounts);
+    </script>
 </body>
 </html>
+<?php $conn->close(); ?>

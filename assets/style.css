@@ -1100,3 +1100,15 @@ button[type="submit"]:hover {
         padding: 15px;
     }
 }
+/* Count Update */
+/* Count update animation */
+.count-updating {
+    animation: pulseUpdate 0.3s ease;
+    color: var(--strath-blue);
+}
+
+@keyframes pulseUpdate {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.7; }
+    100% { transform: scale(1); opacity: 1; }
+}
