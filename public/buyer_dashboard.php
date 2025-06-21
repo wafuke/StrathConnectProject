@@ -1,7 +1,8 @@
 <?php
-// Start session and verify admin access
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'admin') {
+
+// Verify buyer is logged in
+if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'buyer') {
     header("Location: ../public/login.php");
     exit();
 }
@@ -15,7 +16,36 @@ $conn = new mysqli($host, $user, $pass, $db);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+
+// Get recommended products
+$recommended_products = [];
+$product_query = "SELECT p.*, u.username as seller_username 
+                 FROM products p 
+                 JOIN users u ON p.seller_id = u.id 
+                 WHERE p.is_approved = 1 
+                 ORDER BY p.created_at DESC 
+                 LIMIT 4";
+$product_result = $conn->query($product_query);
+if ($product_result) {
+    $recommended_products = $product_result->fetch_all(MYSQLI_ASSOC);
+}
+
+// Get popular services
+$popular_services = [];
+$service_query = "SELECT s.*, u.username as seller_username 
+                FROM services s 
+                JOIN users u ON s.seller_id = u.id 
+                WHERE s.is_approved = 1 
+                ORDER BY s.created_at DESC 
+                LIMIT 4";
+$service_result = $conn->query($service_query);
+if ($service_result) {
+    $popular_services = $service_result->fetch_all(MYSQLI_ASSOC);
+}
+
+$conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,8 +72,8 @@ if ($conn->connect_error) {
         <aside class="sidebar">
             <div class="profile-summary">
                 <img src="../assets/images/profile-placeholder.png" alt="Profile" class="profile-pic">
-                <h3>Buyer Name</h3>
-                <p>@username</p>
+                <h3><?php echo htmlspecialchars($_SESSION['username'] ?? 'Buyer'); ?></h3>
+                <p>@<?php echo htmlspecialchars($_SESSION['username'] ?? 'username'); ?></p>
                 <div class="wallet-balance">
                     <i class="fas fa-wallet"></i> KSh 1,250
                 </div>
@@ -60,78 +90,102 @@ if ($conn->connect_error) {
         </aside>
 
         <main class="dashboard-content">
-            <h1>Welcome Back, Buyer!</h1>
+            <h1>Welcome Back, <?php echo htmlspecialchars($_SESSION['username'] ?? 'Buyer'); ?>!</h1>
             
             <section class="search-section">
-                <div class="search-bar">
-                    <input type="text" placeholder="Search for products or services...">
-                    <button><i class="fas fa-search"></i></button>
-                </div>
-                <div class="search-filters">
-                    <select>
-                        <option>All Categories</option>
-                        <option>Books</option>
-                        <option>Electronics</option>
-                        <option>Clothing</option>
-                        <option>Furniture</option>
-                        <option>Other</option>
-                    </select>
-                    <select>
-                        <option>Sort By</option>
-                        <option>Price: Low to High</option>
-                        <option>Price: High to Low</option>
-                        <option>Newest</option>
-                        <option>Most Popular</option>
-                    </select>
-                </div>
+                <form action="marketplace.php" method="GET" class="search-bar">
+                    <input type="text" name="search" placeholder="Search for products or services...">
+                    <button type="submit"><i class="fas fa-search"></i></button>
+                </form>
             </section>
 
             <section class="featured-products">
-                <h2>Recommended for You</h2>
+                <h2>Recommended Products</h2>
                 <div class="products-grid">
-                    <div class="product-card">
-                        <img src="../assets/images/product-placeholder.jpg" alt="Product">
-                        <h3>Used Textbooks - Business</h3>
-                        <div class="price">KSh 800</div>
-                        <div class="seller-info">
-                            <img src="../assets/images/profile-placeholder.png" alt="Seller">
-                            <span>@johndoe</span>
-                        </div>
-                        <button class="add-to-cart">Add to Cart</button>
-                    </div>
-                    <!-- More product cards would go here -->
+                    <?php if (empty($recommended_products)): ?>
+                        <p>No recommended products found.</p>
+                    <?php else: ?>
+                        <?php foreach ($recommended_products as $product): ?>
+                            <div class="product-card">
+                                <img src="../assets/images/products/<?php echo htmlspecialchars($product['image_path'] ?? 'placeholder.jpg'); ?>" 
+                                     alt="<?php echo htmlspecialchars($product['name']); ?>">
+                                <h3><?php echo htmlspecialchars($product['name']); ?></h3>
+                                <div class="price">KSh <?php echo number_format($product['price'], 2); ?></div>
+                                <div class="seller-info">
+                                    <img src="../assets/images/profile-placeholder.png" alt="Seller">
+                                    <span>@<?php echo htmlspecialchars($product['seller_username']); ?></span>
+                                </div>
+                                <button class="add-to-cart" data-product-id="<?php echo $product['id']; ?>">
+                                    Add to Cart
+                                </button>
+                                <a href="product_detail.php?id=<?php echo $product['id']; ?>" class="btn-view-details">
+                                    View Details
+                                </a>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
+                <div class="view-all">
+                    <a href="marketplace.php" class="btn-view-all">View All Products</a>
                 </div>
             </section>
 
             <section class="featured-services">
                 <h2>Popular Services</h2>
                 <div class="services-grid">
-                    <div class="service-card">
-                        <img src="../assets/images/service-placeholder.jpg" alt="Service">
-                        <h3>Math Tutoring</h3>
-                        <div class="rate">KSh 500/hr</div>
-                        <div class="seller-info">
-                            <img src="../assets/images/profile-placeholder.png" alt="Seller">
-                            <span>@mathwizard</span>
-                        </div>
-                        <div class="rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                            <span>(15)</span>
-                        </div>
-                        <button class="book-service">Book Now</button>
-                    </div>
-                    <!-- More service cards would go here -->
+                    <?php if (empty($popular_services)): ?>
+                        <p>No popular services found.</p>
+                    <?php else: ?>
+                        <?php foreach ($popular_services as $service): ?>
+                            <div class="service-card">
+                                <img src="../assets/images/services/<?php echo htmlspecialchars($service['image_path'] ?? 'service-placeholder.jpg'); ?>" 
+                                     alt="<?php echo htmlspecialchars($service['title']); ?>">
+                                <h3><?php echo htmlspecialchars($service['title']); ?></h3>
+                                <div class="rate">KSh <?php echo number_format($service['price'], 2); ?></div>
+                                <div class="seller-info">
+                                    <img src="../assets/images/profile-placeholder.png" alt="Seller">
+                                    <span>@<?php echo htmlspecialchars($service['seller_username']); ?></span>
+                                </div>
+                                <a href="service_detail.php?id=<?php echo $service['id']; ?>" class="book-service">
+                                    View Details
+                                </a>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
+                <div class="view-all">
+                    <a href="services.php" class="btn-view-all">View All Services</a>
                 </div>
             </section>
         </main>
     </div>
 
     <footer class="footer">
-        <p>&copy; 2023 StrathConnect. All rights reserved.</p>
+        <p>&copy; <?php echo date('Y'); ?> StrathConnect. All rights reserved.</p>
     </footer>
+
+    <script>
+    // Add to cart functionality
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+        button.addEventListener('click', function() {
+            const productId = this.getAttribute('data-product-id');
+            fetch('add_to_cart.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `product_id=${productId}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Product added to cart!');
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            });
+        });
+    });
+    </script>
 </body>
 </html>
