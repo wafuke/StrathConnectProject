@@ -39,7 +39,7 @@ Shopping Cart & Checkout
 Add/remove items from cart
 
 Basic checkout (mock payment, just save order to DB)
-No need for real payments (Stripe/PayPal) in a school project.
+
 
 Admin Panel (Basic)
 
@@ -85,13 +85,13 @@ Users: id, email, password_hash, role (admin/seller/buyer)
 Products: id, seller_id, name, price, image, is_approved  
 Orders: id, buyer_id, product_id, quantity, status (pending/delivered)  
 Tech Stack Suggestions (Simple Options)
-Frontend: React (Vite) / Vue.js / Plain HTML+JS
+Frontend: Plain HTML + CSS
 
-Backend: Node.js (Express) / Python (Flask) / Firebase
+Backend: PHP
 
-Database: SQLite (simple), PostgreSQL, or Firebase Firestore
+Database: XAMPP
 
-Auth: Firebase Auth, JWT, or session-based
+
 
 ------------------------------------------------------------------------------------------
 
