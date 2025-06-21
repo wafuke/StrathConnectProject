@@ -98,6 +98,7 @@ Auth: Firebase Auth, JWT, or session-based
 Error Notes : 
 
 Signup form: Should show what error the user made when it fails
+Admin should be a maximum of 3
 
 
 
