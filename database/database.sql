@@ -52,3 +52,40 @@ CREATE TABLE services (
     is_approved BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (seller_id) REFERENCES users(id)
 );
+-- Cart table
+CREATE TABLE IF NOT EXISTS cart (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    buyer_id INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity INT DEFAULT 1,
+    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (buyer_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
+    UNIQUE KEY (buyer_id, product_id)
+);
+
+-- Wishlist table
+CREATE TABLE IF NOT EXISTS wishlist (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    buyer_id INT NOT NULL,
+    product_id INT NOT NULL,
+    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (buyer_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
+    UNIQUE KEY (buyer_id, product_id)
+);
+
+-- Orders table
+CREATE TABLE IF NOT EXISTS orders (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    buyer_id INT NOT NULL,
+    seller_id INT NOT NULL,
+    product_id INT NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    quantity INT NOT NULL DEFAULT 1,
+    status ENUM('Pending', 'Processing', 'Shipped', 'Delivered', 'Completed', 'Cancelled') DEFAULT 'Pending',
+    order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (buyer_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (seller_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+);
