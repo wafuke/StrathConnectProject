@@ -1257,7 +1257,7 @@ button[type="submit"]:hover {
 .btn-back:hover {
     background-color: #5a6268;
 }
-/* admin_services.css */
+/* admin_services css */
 .services-container {
     max-width: 1200px;
     margin: 2rem auto;
@@ -1426,4 +1426,165 @@ button[type="submit"]:hover {
 .empty-state p {
     margin: 0 0 20px 0;
     color: #666;
+}
+/* service_details css */
+.service-detail-container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.service-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.service-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.service-image-container {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    height: 350px;
+    background: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.service-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.service-status-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+}
+
+.status-approved {
+    background-color: #4CAF50;
+}
+
+.status-pending {
+    background-color: #FFA500;
+}
+
+.service-info {
+    padding: 1rem;
+}
+
+.service-title {
+    font-size: 1.8rem;
+    color: #003366;
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+.service-meta {
+    margin: 1.5rem 0;
+}
+
+.meta-item {
+    display: flex;
+    margin-bottom: 0.8rem;
+}
+
+.meta-label {
+    font-weight: 600;
+    width: 120px;
+    color: #555;
+}
+
+.meta-value {
+    flex: 1;
+}
+
+.seller-info {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background-color: #f5f7fa;
+    border-radius: 8px;
+}
+
+.service-description {
+    margin: 1.5rem 0;
+    line-height: 1.6;
+}
+
+.service-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #eee;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-approve {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.btn-approve:hover {
+    background-color: #3e8e41;
+}
+
+.btn-reject {
+    background-color: #f44336;
+    color: white;
+}
+
+.btn-reject:hover {
+    background-color: #d32f2f;
+}
+
+.btn-back {
+    background-color: #6c757d;
+    color: white;
+    text-decoration: none;
+}
+
+.btn-back:hover {
+    background-color: #5a6268;
+}
+
+.rate-type-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    background-color: #e0f7fa;
+    color: #00838f;
+    margin-left: 0.5rem;
 }
