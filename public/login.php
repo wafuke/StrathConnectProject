@@ -1,5 +1,11 @@
 <?php
-
+// Start session and verify admin access
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../public/login.php");
+    exit();
+}
+// Database connection
 $host = 'localhost';
 $user = 'root';
 $pass = '';
