@@ -1,10 +1,6 @@
 <?php
 // Start session and verify admin access
 session_start();
-if (!isset($_SESSION['user_id'])) {
-    header("Location: ../public/login.php");
-    exit();
-}
 // Database connection
 $host = 'localhost';
 $user = 'root';
@@ -64,7 +60,7 @@ if ($conn->connect_error) {
 
         <div class="form-group password-wrapper">
           <label for="password">Password</label>
-          <input type="password" id="password" name="password" required>
+          <input type="password" id="password" name="password" minlength="8"  required>
           <span class="input-hint">Minimum 8 characters</span>
         </div>
 

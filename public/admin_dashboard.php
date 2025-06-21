@@ -1,10 +1,11 @@
 <?php
 // Start session and verify admin access
 session_start();
-if (!isset($_SESSION['user_id'])|| $_SESSION['user_type'] !== 'admin') {
+if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'admin') {
     header("Location: ../public/login.php");
     exit();
 }
+
 // Database connection
 $host = 'localhost';
 $user = 'root';
@@ -15,7 +16,54 @@ $conn = new mysqli($host, $user, $pass, $db);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+
+// Get statistics
+$stats = [];
+
+// Total Users
+$query = "SELECT COUNT(*) as total FROM users";
+$result = $conn->query($query);
+$stats['total_users'] = $result->fetch_assoc()['total'];
+
+// Active Products (approved)
+$query = "SELECT COUNT(*) as total FROM products WHERE is_approved = 1";
+$result = $conn->query($query);
+$stats['active_products'] = $result->fetch_assoc()['total'];
+
+// Active Services (approved)
+$query = "SELECT COUNT(*) as total FROM services WHERE is_approved = 1";
+$result = $conn->query($query);
+$stats['active_services'] = $result->fetch_assoc()['total'];
+
+// Pending Products
+$query = "SELECT COUNT(*) as total FROM products WHERE is_approved = 0";
+$result = $conn->query($query);
+$stats['pending_products'] = $result->fetch_assoc()['total'];
+
+// Recent Activity (last 5 activities)
+$query = "(
+            SELECT 'product' as type, p.name as title, u.username, p.created_at 
+            FROM products p 
+            JOIN users u ON p.seller_id = u.id 
+            ORDER BY p.created_at DESC 
+            LIMIT 2
+          ) UNION ALL (
+            SELECT 'service' as type, s.title, u.username, s.created_at 
+            FROM services s 
+            JOIN users u ON s.seller_id = u.id 
+            ORDER BY s.created_at DESC 
+            LIMIT 2
+          ) UNION ALL (
+            SELECT 'user' as type, username as title, username, created_at 
+            FROM users 
+            ORDER BY created_at DESC 
+            LIMIT 1
+          ) 
+          ORDER BY created_at DESC 
+          LIMIT 5";
+$recent_activities = $conn->query($query)->fetch_all(MYSQLI_ASSOC);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,7 +90,7 @@ if ($conn->connect_error) {
         <aside class="sidebar">
             <div class="profile-summary">
                 <img src="../assets/images/admin-placeholder.png" alt="Profile" class="profile-pic">
-                <h3>Admin Name</h3>
+                <h3><?php echo htmlspecialchars($_SESSION['username'] ?? 'Admin'); ?></h3>
                 <p>Administrator</p>
             </div>
             <nav class="sidebar-nav">
@@ -62,56 +110,65 @@ if ($conn->connect_error) {
             <div class="stats-grid">
                 <div class="stat-card">
                     <h3>Total Users</h3>
-                    <p>1,245</p>
+                    <p><?php echo number_format($stats['total_users']); ?></p>
                     <i class="fas fa-users"></i>
                 </div>
                 <div class="stat-card">
                     <h3>Active Products</h3>
-                    <p>356</p>
+                    <p><?php echo number_format($stats['active_products']); ?></p>
                     <i class="fas fa-boxes"></i>
                 </div>
                 <div class="stat-card">
                     <h3>Active Services</h3>
-                    <p>128</p>
+                    <p><?php echo number_format($stats['active_services']); ?></p>
                     <i class="fas fa-tools"></i>
                 </div>
                 <div class="stat-card">
-                    <h3>Transactions Today</h3>
-                    <p>KSh 42,800</p>
-                    <i class="fas fa-money-bill-wave"></i>
+                    <h3>Pending Products</h3>
+                    <p><?php echo number_format($stats['pending_products']); ?></p>
+                    <i class="fas fa-clock"></i>
                 </div>
             </div>
 
             <section class="recent-activity">
                 <h2>Recent Activity</h2>
                 <div class="activity-list">
-                    <div class="activity-item">
-                        <div class="activity-icon">
-                            <i class="fas fa-user-plus"></i>
+                    <?php if (empty($recent_activities)): ?>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p>No recent activity found</p>
+                            </div>
                         </div>
-                        <div class="activity-content">
-                            <p>New user registered: @newstudent</p>
-                            <small>30 minutes ago</small>
-                        </div>
-                    </div>
-                    <div class="activity-item">
-                        <div class="activity-icon">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </div>
-                        <div class="activity-content">
-                            <p>Product reported: "Used Laptop" - Under review</p>
-                            <small>2 hours ago</small>
-                        </div>
-                    </div>
-                    <div class="activity-item">
-                        <div class="activity-icon">
-                            <i class="fas fa-ban"></i>
-                        </div>
-                        <div class="activity-content">
-                            <p>User @spammer suspended for policy violation</p>
-                            <small>5 hours ago</small>
-                        </div>
-                    </div>
+                    <?php else: ?>
+                        <?php foreach ($recent_activities as $activity): ?>
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <?php if ($activity['type'] === 'product'): ?>
+                                        <i class="fas fa-box-open"></i>
+                                    <?php elseif ($activity['type'] === 'service'): ?>
+                                        <i class="fas fa-concierge-bell"></i>
+                                    <?php else: ?>
+                                        <i class="fas fa-user-plus"></i>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="activity-content">
+                                    <p>
+                                        <?php if ($activity['type'] === 'product'): ?>
+                                            New product added: "<?php echo htmlspecialchars($activity['title']); ?>" by @<?php echo htmlspecialchars($activity['username']); ?>
+                                        <?php elseif ($activity['type'] === 'service'): ?>
+                                            New service listed: "<?php echo htmlspecialchars($activity['title']); ?>" by @<?php echo htmlspecialchars($activity['username']); ?>
+                                        <?php else: ?>
+                                            New user registered: @<?php echo htmlspecialchars($activity['username']); ?>
+                                        <?php endif; ?>
+                                    </p>
+                                    <small><?php echo date('M j, Y g:i A', strtotime($activity['created_at'])); ?></small>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
             </section>
 
@@ -133,7 +190,8 @@ if ($conn->connect_error) {
     </div>
 
     <footer class="footer">
-        <p>&copy; 2023 StrathConnect. All rights reserved.</p>
+        <p>&copy; <?php echo date('Y'); ?> StrathConnect. All rights reserved.</p>
     </footer>
 </body>
 </html>
+<?php $conn->close(); ?>
