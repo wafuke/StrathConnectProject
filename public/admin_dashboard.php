@@ -81,7 +81,6 @@ $recent_activities = $conn->query($query)->fetch_all(MYSQLI_ASSOC);
             <li><a href="admin_users.php">Users</a></li>
             <li><a href="admin_products.php">Products</a></li>
             <li><a href="admin_services.php">Services</a></li>
-            <li><a href="admin_reports.php">Reports</a></li>
             <li><a href="../public/login.php">Logout</a></li>
         </ul>
     </nav>
@@ -99,8 +98,6 @@ $recent_activities = $conn->query($query)->fetch_all(MYSQLI_ASSOC);
                 <a href="admin_products.php"><i class="fas fa-box-open"></i> Product Management</a>
                 <a href="admin_services.php"><i class="fas fa-concierge-bell"></i> Service Management</a>
                 <a href="admin_orders.php"><i class="fas fa-shopping-cart"></i> Order Management</a>
-                <a href="admin_reports.php"><i class="fas fa-chart-bar"></i> Reports</a>
-                <a href="admin_settings.php"><i class="fas fa-cog"></i> System Settings</a>
             </nav>
         </aside>
 
@@ -181,8 +178,8 @@ $recent_activities = $conn->query($query)->fetch_all(MYSQLI_ASSOC);
                     <button class="action-btn" onclick="location.href='admin_products.php'">
                         <i class="fas fa-boxes"></i> Review Products
                     </button>
-                    <button class="action-btn" onclick="location.href='admin_reports.php'">
-                        <i class="fas fa-flag"></i> View Reports
+                    <button class="action-btn" onclick="location.href='admin_services.php'">
+                        <i class="fas fa-concierge-bell"></i> Review Services
                     </button>
                 </div>
             </section>
