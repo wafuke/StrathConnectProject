@@ -52,28 +52,30 @@ CREATE TABLE services (
     is_approved BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (seller_id) REFERENCES users(id)
 );
--- Cart table
+-- Enhanced Cart table with better constraints
 CREATE TABLE IF NOT EXISTS cart (
     id INT AUTO_INCREMENT PRIMARY KEY,
     buyer_id INT NOT NULL,
     product_id INT NOT NULL,
-    quantity INT DEFAULT 1,
+    quantity INT NOT NULL DEFAULT 1 CHECK (quantity > 0),
     added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (buyer_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
-    UNIQUE KEY (buyer_id, product_id)
-);
+    UNIQUE KEY unique_cart_entry (buyer_id, product_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Wishlist table
+-- Enhanced Wishlist table with better constraints
 CREATE TABLE IF NOT EXISTS wishlist (
     id INT AUTO_INCREMENT PRIMARY KEY,
     buyer_id INT NOT NULL,
     product_id INT NOT NULL,
     added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    notes TEXT,
     FOREIGN KEY (buyer_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
-    UNIQUE KEY (buyer_id, product_id)
-);
+    UNIQUE KEY unique_wishlist_entry (buyer_id, product_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Orders table
 CREATE TABLE IF NOT EXISTS orders (
@@ -89,3 +91,15 @@ CREATE TABLE IF NOT EXISTS orders (
     FOREIGN KEY (seller_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
+CREATE TABLE IF NOT EXISTS reviews (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    product_id INT NOT NULL,
+    buyer_id INT NOT NULL,
+    order_id INT NOT NULL,
+    rating TINYINT NOT NULL CHECK (rating BETWEEN 1 AND 5),
+    review TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (product_id) REFERENCES products(id),
+    FOREIGN KEY (buyer_id) REFERENCES users(id),
+    FOREIGN KEY (order_id) REFERENCES orders(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
