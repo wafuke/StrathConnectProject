@@ -99,7 +99,11 @@ Error Notes :
 
 Signup form: Should show what error the user made when it fails
 Admin should be a maximum of 3
-
+Elvis messed with the product page 
+Index.PHP
+View marketplace on frontend 
+Validate emails 
+Images for signup and services pages
 
 
 
