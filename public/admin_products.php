@@ -122,7 +122,7 @@ $products = $result->fetch_all(MYSQLI_ASSOC);
                                         </button>
                                     </form>
                                     
-                                    <a href="product_details.php?id=<?php echo $product['id']; ?>" class="btn btn-view">
+                                    <a href="admin_product_details.php?id=<?php echo $product['id']; ?>" class="btn btn-view">
                                         <i class="fas fa-eye"></i> View
                                     </a>
                                 </div>

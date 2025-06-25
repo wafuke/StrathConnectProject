@@ -100,7 +100,5 @@ Error Notes :
 Signup form: Should show what error the user made when it fails
 Admin should be a maximum of 3
 
-
-
-
+add a product_details page for the admin
 
