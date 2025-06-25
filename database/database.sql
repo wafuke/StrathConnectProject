@@ -105,3 +105,7 @@ CREATE TABLE IF NOT EXISTS reviews (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 ALTER TABLE users ADD COLUMN profile_pic VARCHAR(255) DEFAULT '../assets/images/profile-placeholder.png';
+ALTER TABLE users 
+ADD COLUMN business_name VARCHAR(100),
+ADD COLUMN business_description TEXT,
+ADD COLUMN contact_number VARCHAR(20);
