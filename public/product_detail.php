@@ -70,7 +70,6 @@ $conn->close();
     <link rel="stylesheet" href="../assets/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Your existing CSS styles */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -132,6 +131,14 @@ $conn->close();
         .btn-primary:hover {
             background: #FFC000;
         }
+        .btn-buy-now {
+            background: #FFA41C;
+            color: #000;
+            border: none;
+        }
+        .btn-buy-now:hover {
+            background: #FA8900;
+        }
         .btn-secondary {
             background: #f0f0f0;
             color: #000;
@@ -169,7 +176,7 @@ $conn->close();
     </style>
 </head>
 <body>
-      <nav class="navbar">
+    <nav class="navbar">
         <div class="logo">StrathConnect</div>
         <ul class="nav-links">
             <li><a href="../public/index.php">Home</a></li>
@@ -204,6 +211,9 @@ $conn->close();
                 <div class="action-buttons">
                     <button class="btn btn-primary add-to-cart" data-product-id="<?php echo $product['id']; ?>">
                         <i class="fas fa-shopping-cart"></i> Add to Cart
+                    </button>
+                    <button class="btn btn-buy-now buy-now" data-product-id="<?php echo $product['id']; ?>">
+                        <i class="fas fa-bolt"></i> Buy It Now
                     </button>
                     <button class="btn btn-secondary <?php echo $product['in_wishlist'] ? 'remove-from-wishlist' : 'add-to-wishlist'; ?>" 
                             data-product-id="<?php echo $product['id']; ?>">
@@ -240,9 +250,8 @@ $conn->close();
         <p>&copy; <?php echo date('Y'); ?> StrathConnect. All rights reserved.</p>
     </footer>
 
-
     <script>
-    // Your existing JavaScript code
+    // Add to cart
     document.querySelector('.add-to-cart')?.addEventListener('click', function() {
         const button = this;
         const originalText = button.innerHTML;
@@ -278,6 +287,39 @@ $conn->close();
         });
     });
 
+    // Buy it now
+    document.querySelector('.buy-now')?.addEventListener('click', function() {
+        const button = this;
+        const originalText = button.innerHTML;
+        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        button.disabled = true;
+        
+        fetch('add_to_cart.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `product_id=${button.dataset.productId}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                window.location.href = 'buyer_cart.php';
+            } else {
+                alert('Error: ' + data.message);
+                button.innerHTML = originalText;
+                button.disabled = false;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to process. Check console for details.');
+            button.innerHTML = originalText;
+            button.disabled = false;
+        });
+    });
+
+    // Wishlist
     document.querySelector('.add-to-wishlist, .remove-from-wishlist')?.addEventListener('click', function() {
         const button = this;
         const isAdd = button.classList.contains('add-to-wishlist');
