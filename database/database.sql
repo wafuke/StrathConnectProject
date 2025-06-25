@@ -103,3 +103,5 @@ CREATE TABLE IF NOT EXISTS reviews (
     FOREIGN KEY (buyer_id) REFERENCES users(id),
     FOREIGN KEY (order_id) REFERENCES orders(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE users ADD COLUMN profile_pic VARCHAR(255) DEFAULT '../assets/images/profile-placeholder.png';
