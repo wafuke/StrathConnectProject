@@ -104,7 +104,9 @@ Index.PHP
 View marketplace on frontend 
 Validate emails 
 Images for signup and services pages
-
+Orders on seller side 
+Seller dashboard should automatically update
+Mpesa integration
 
 
 
