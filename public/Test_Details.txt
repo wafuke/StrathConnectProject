@@ -1,0 +1,3 @@
+Seller : Email : mohamurshid@gmail.com Pass: 12345678
+Buyer : Email : Simplify@gmail.com Pass: 12345678
+Admin : Email : Elvis@gmail.com Pass: 12345678
