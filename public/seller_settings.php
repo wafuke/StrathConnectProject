@@ -83,7 +83,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $success = "Profile picture updated successfully!";
             } else {
                 $error = "Error updating profile picture in database.";
-                // Delete the uploaded file if database update failed
                 unlink($target_file);
             }
             $update_stmt->close();
@@ -351,17 +350,9 @@ $conn->close();
     <div class="dashboard-container">
         <aside class="sidebar">
             <div class="profile-summary">
-                <img src="<?php echo htmlspecialchars($_SESSION['profile_pic'] ?? '../assets/images/profile-placeholder.png'); ?>" alt="Profile" class="profile-pic">
+                <img src="<?php echo htmlspecialchars($profile_pic); ?>" alt="Profile" class="profile-pic">
                 <h3><?php echo htmlspecialchars($username); ?></h3>
                 <p>@<?php echo htmlspecialchars($username); ?></p>
-                <div class="rating">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="far fa-star"></i>
-                    <span>(24 reviews)</span>
-                </div>
             </div>
             <nav class="sidebar-nav">
                 <a href="seller_dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a>

@@ -112,14 +112,6 @@ try {
                 <img src="<?php echo htmlspecialchars($_SESSION['profile_pic'] ?? '../assets/images/profile-placeholder.png'); ?>" alt="Profile" class="profile-pic">
                 <h3><?php echo htmlspecialchars($_SESSION['username'] ?? 'Seller'); ?></h3>
                 <p>@<?php echo htmlspecialchars($_SESSION['username'] ?? 'username'); ?></p>
-                <div class="rating">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="far fa-star"></i>
-                    <span>(24 reviews)</span>
-                </div>
             </div>
             <nav class="sidebar-nav">
                 <a href="seller_dashboard.php" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
