@@ -1,7 +1,5 @@
 <?php
 session_start();
-
-// Verify seller is logged in
 if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'seller') {
     header("Location: ../public/login.php");
     exit();
@@ -22,7 +20,7 @@ if ($conn->connect_error) {
 $error = '';
 $success = '';
 $username = $_SESSION['username'] ?? '';
-$profile_pic = '../assets/images/profile-placeholder.png';
+$profile_pic = $_SESSION['profile_pic'] ?? '../assets/images/profile-placeholder.png';
 $business_name = '';
 $business_description = '';
 $contact_number = '';
@@ -43,6 +41,7 @@ if ($result->num_rows > 0) {
     $contact_number = $user_data['contact_number'] ?? '';
     if (!empty($user_data['profile_pic'])) {
         $profile_pic = $user_data['profile_pic'];
+        $_SESSION['profile_pic'] = $user_data['profile_pic'];
     }
 }
 
@@ -352,7 +351,7 @@ $conn->close();
     <div class="dashboard-container">
         <aside class="sidebar">
             <div class="profile-summary">
-                <img src="<?php echo htmlspecialchars($profile_pic); ?>" alt="Profile" class="profile-pic">
+                <img src="<?php echo htmlspecialchars($_SESSION['profile_pic'] ?? '../assets/images/profile-placeholder.png'); ?>" alt="Profile" class="profile-pic">
                 <h3><?php echo htmlspecialchars($username); ?></h3>
                 <p>@<?php echo htmlspecialchars($username); ?></p>
                 <div class="rating">

@@ -1,7 +1,5 @@
 <?php
 session_start();
-
-// Verify seller is logged in
 if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'seller') {
     header("Location: ../public/login.php");
     exit();
@@ -53,7 +51,7 @@ $stmt->close();
     <div class="dashboard-container">
         <aside class="sidebar">
             <div class="profile-summary">
-                <img src="../assets/images/profile-placeholder.png" alt="Profile" class="profile-pic">
+                <img src="<?php echo htmlspecialchars($_SESSION['profile_pic'] ?? '../assets/images/profile-placeholder.png'); ?>" alt="Profile" class="profile-pic">
                 <h3><?php echo htmlspecialchars($_SESSION['username'] ?? 'Seller'); ?></h3>
                 <p>@<?php echo htmlspecialchars($_SESSION['username'] ?? 'username'); ?></p>
             </div>
@@ -132,6 +130,4 @@ $stmt->close();
     </footer>
 </body>
 </html>
-<?php
-$conn->close();
-?>
+<?php $conn->close(); ?>

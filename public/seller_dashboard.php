@@ -16,7 +16,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Initialize counts
+// Initialize counts with default values
 $product_count = 0;
 $service_count = 0;
 
@@ -109,7 +109,7 @@ try {
     <div class="dashboard-container">
         <aside class="sidebar">
             <div class="profile-summary">
-                <img src="../assets/images/profile-placeholder.png" alt="Profile" class="profile-pic">
+                <img src="<?php echo htmlspecialchars($_SESSION['profile_pic'] ?? '../assets/images/profile-placeholder.png'); ?>" alt="Profile" class="profile-pic">
                 <h3><?php echo htmlspecialchars($_SESSION['username'] ?? 'Seller'); ?></h3>
                 <p>@<?php echo htmlspecialchars($_SESSION['username'] ?? 'username'); ?></p>
                 <div class="rating">
