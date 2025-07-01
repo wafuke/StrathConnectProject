@@ -1,6 +1,7 @@
 <?php
-// Start session and verify admin access
 session_start();
+
+// Verify admin is logged in
 if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'admin') {
     header("Location: ../public/login.php");
     exit();
@@ -15,6 +16,29 @@ $db = 'strathconnect';
 $conn = new mysqli($host, $user, $pass, $db);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
+}
+
+// Get current profile picture from session or database
+$profile_pic = '../assets/images/admin-placeholder.png';
+if (isset($_SESSION['profile_pic'])) {
+    $profile_pic = $_SESSION['profile_pic'];
+} else {
+    // Fallback to database if not in session
+    $user_id = $_SESSION['user_id'];
+    $query = "SELECT profile_pic FROM users WHERE id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    if ($result->num_rows > 0) {
+        $user_data = $result->fetch_assoc();
+        if (!empty($user_data['profile_pic'])) {
+            $profile_pic = $user_data['profile_pic'];
+            $_SESSION['profile_pic'] = $user_data['profile_pic']; // Store in session for future requests
+        }
+    }
+    $stmt->close();
 }
 
 // Get statistics
@@ -88,7 +112,7 @@ $recent_activities = $conn->query($query)->fetch_all(MYSQLI_ASSOC);
     <div class="dashboard-container">
         <aside class="sidebar">
             <div class="profile-summary">
-                <img src="../assets/images/admin-placeholder.png" alt="Profile" class="profile-pic">
+                <img src="<?php echo htmlspecialchars($profile_pic); ?>" alt="Profile" class="profile-pic">
                 <h3><?php echo htmlspecialchars($_SESSION['username'] ?? 'Admin'); ?></h3>
                 <p>Administrator</p>
             </div>
@@ -98,7 +122,7 @@ $recent_activities = $conn->query($query)->fetch_all(MYSQLI_ASSOC);
                 <a href="admin_products.php"><i class="fas fa-box-open"></i> Product Management</a>
                 <a href="admin_services.php"><i class="fas fa-concierge-bell"></i> Service Management</a>
                 <a href="admin_orders.php"><i class="fas fa-shopping-cart"></i> Order Management</a>
-                 <a href="admin_settings.php"><i class="fas fa-cog"></i> Settings</a>
+                <a href="admin_settings.php"><i class="fas fa-cog"></i> Settings</a>
             </nav>
         </aside>
 

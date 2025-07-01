@@ -37,6 +37,7 @@ if ($result->num_rows > 0) {
     $username = $user_data['username'];
     if (!empty($user_data['profile_pic'])) {
         $profile_pic = $user_data['profile_pic'];
+        $_SESSION['profile_pic'] = $user_data['profile_pic']; // Ensure session has current pic
     }
 }
 
@@ -74,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $update_stmt->bind_param("si", $target_file, $user_id);
             if ($update_stmt->execute()) {
                 $profile_pic = $target_file;
-                $_SESSION['profile_pic'] = $target_file;
+                $_SESSION['profile_pic'] = $target_file; // Update session immediately
                 $success = "Profile picture updated successfully!";
             } else {
                 $error = "Error updating profile picture in database.";
@@ -431,49 +432,49 @@ $conn->close();
         }
     });
     
-           // Password strength indicator
-        document.getElementById('new_password').addEventListener('input', function() {
-            const password = this.value;
-            const strengthBar = document.getElementById('passwordStrengthBar');
-            let strength = 0;
-            
-            // Check password length
-            if (password.length >= 8) strength += 1;
-            if (password.length >= 12) strength += 1;
-            
-            // Check for mixed case
-            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength += 1;
-            
-            // Check for numbers
-            if (/\d/.test(password)) strength += 1;
-            
-            // Check for special characters
-            if (/[^a-zA-Z0-9]/.test(password)) strength += 1;
-            
-            // Update strength bar
-            switch(strength) {
-                case 0:
-                case 1:
-                    strengthBar.style.width = '25%';
-                    strengthBar.style.backgroundColor = '#dc3545'; // red
-                    break;
-                case 2:
-                    strengthBar.style.width = '50%';
-                    strengthBar.style.backgroundColor = '#fd7e14'; // orange
-                    break;
-                case 3:
-                    strengthBar.style.width = '75%';
-                    strengthBar.style.backgroundColor = '#ffc107'; // yellow
-                    break;
-                case 4:
-                case 5:
-                    strengthBar.style.width = '100%';
-                    strengthBar.style.backgroundColor = '#28a745'; // green
-                    break;
-                default:
-                    strengthBar.style.width = '0%';
-            }
-        });
+    // Password strength indicator
+    document.getElementById('new_password').addEventListener('input', function() {
+        const password = this.value;
+        const strengthBar = document.getElementById('passwordStrengthBar');
+        let strength = 0;
+        
+        // Check password length
+        if (password.length >= 8) strength += 1;
+        if (password.length >= 12) strength += 1;
+        
+        // Check for mixed case
+        if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength += 1;
+        
+        // Check for numbers
+        if (/\d/.test(password)) strength += 1;
+        
+        // Check for special characters
+        if (/[^a-zA-Z0-9]/.test(password)) strength += 1;
+        
+        // Update strength bar
+        switch(strength) {
+            case 0:
+            case 1:
+                strengthBar.style.width = '25%';
+                strengthBar.style.backgroundColor = '#dc3545'; // red
+                break;
+            case 2:
+                strengthBar.style.width = '50%';
+                strengthBar.style.backgroundColor = '#fd7e14'; // orange
+                break;
+            case 3:
+                strengthBar.style.width = '75%';
+                strengthBar.style.backgroundColor = '#ffc107'; // yellow
+                break;
+            case 4:
+            case 5:
+                strengthBar.style.width = '100%';
+                strengthBar.style.backgroundColor = '#28a745'; // green
+                break;
+            default:
+                strengthBar.style.width = '0%';
+        }
+    });
     </script>
 </body>
 </html>
