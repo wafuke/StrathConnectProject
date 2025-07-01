@@ -121,7 +121,6 @@ $recent_activities = $conn->query($query)->fetch_all(MYSQLI_ASSOC);
                 <a href="admin_users.php"><i class="fas fa-users"></i> User Management</a>
                 <a href="admin_products.php"><i class="fas fa-box-open"></i> Product Management</a>
                 <a href="admin_services.php"><i class="fas fa-concierge-bell"></i> Service Management</a>
-                <a href="admin_orders.php"><i class="fas fa-shopping-cart"></i> Order Management</a>
                 <a href="admin_settings.php"><i class="fas fa-cog"></i> Settings</a>
             </nav>
         </aside>
