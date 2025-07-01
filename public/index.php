@@ -198,7 +198,7 @@ session_start();
             <ul class="nav-links">
                 <li><a href="#" class="active">Home</a></li>
                 <li><a href="../public/products.php">Products</a></li>
-                <li><a href="../public/services.php">Services</a></li>
+                <li><a href="../public/services_home.php">Services</a></li>
                 <li><a href="../public/login.php" class="login-btn">Login</a></li>
             </ul>
         </nav>
