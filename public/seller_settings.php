@@ -345,7 +345,6 @@ $conn->close();
             <li><a href="seller_dashboard.php">Dashboard</a></li>
             <li><a href="seller_products.php">My Products</a></li>
             <li><a href="seller_services.php">My Services</a></li>
-            <li><a href="seller_orders.php">Orders</a></li>
             <li><a href="../public/login.php">Logout</a></li>
         </ul>
     </nav>
@@ -369,8 +368,6 @@ $conn->close();
                 <a href="seller_dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
                 <a href="seller_products.php"><i class="fas fa-box-open"></i> My Products</a>
                 <a href="seller_services.php"><i class="fas fa-concierge-bell"></i> My Services</a>
-                <a href="seller_orders.php"><i class="fas fa-shopping-cart"></i> Orders</a>
-                <a href="seller_messages.php"><i class="fas fa-envelope"></i> Messages</a>
                 <a href="seller_settings.php" class="active"><i class="fas fa-cog"></i> Settings</a>
             </nav>
         </aside>
