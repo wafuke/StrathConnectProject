@@ -1,7 +1,5 @@
 <?php
 session_start();
-
-// Verify seller is logged in
 if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'seller') {
     header("Location: ../public/login.php");
     exit();
@@ -18,199 +16,176 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Initialize variables
-$service = [];
-$errors = [];
-$categories = ['Website', 'Design', 'Programming', 'Writing', 'Other'];
-$rate_types = ['hourly', 'fixed', 'per_project'];
-
-// Get service details
-if (!isset($_GET['id'])) {
-    $_SESSION['error'] = "No service specified";
-    header("Location: seller_services.php");
-    exit();
+// Check login & seller
+if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'seller') {
+    header("Location: login.php");
+    exit;
 }
 
-$service_id = intval($_GET['id']);
-$seller_id = $_SESSION['user_id'];
+// Get service ID
+if (!isset($_GET['id'])) {
+    echo "Service ID is required.";
+    exit;
+}
 
-$query = "SELECT * FROM services WHERE id = ? AND seller_id = ?";
-$stmt = $conn->prepare($query);
-$stmt->bind_param("ii", $service_id, $seller_id);
+$service_id = (int)$_GET['id'];
+
+// Fetch service
+$sql = "SELECT * FROM services WHERE id = ? AND seller_id = ?";
+$stmt = $conn->prepare($sql);
+if (!$stmt) {
+    die("Prepare failed: " . $conn->error);
+}
+$stmt->bind_param("ii", $service_id, $_SESSION['user_id']);
 $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows !== 1) {
-    $_SESSION['error'] = "Service not found or you don't have permission";
-    header("Location: seller_services.php");
-    exit();
+    echo "Service not found.";
+    exit;
 }
 
 $service = $result->fetch_assoc();
-$stmt->close();
 
-// Handle form submission
+$message = '';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Validate inputs
     $title = trim($_POST['title']);
-    $category = trim($_POST['category']);
     $description = trim($_POST['description']);
-    $price = floatval($_POST['price']);
+    $category = trim($_POST['category']);
+    $price = (float)$_POST['price'];
     $rate_type = trim($_POST['rate_type']);
-    
-    if (empty($title)) $errors[] = "Title is required";
-    if (!in_array($category, $categories)) $errors[] = "Invalid category";
-    if (empty($description)) $errors[] = "Description is required";
-    if ($price <= 0) $errors[] = "Price must be positive";
-    if (!in_array($rate_type, $rate_types)) $errors[] = "Invalid rate type";
 
-    // Process image if no errors
-    $image_path = $service['image_path'];
-    if (empty($errors) && isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-        $target_dir = "../assets/images/services/";
-        $allowed_types = ['image/jpeg', 'image/png'];
-        
-        if (!in_array($_FILES['image']['type'], $allowed_types)) {
-            $errors[] = "Only JPEG/PNG images allowed";
-        } elseif ($_FILES['image']['size'] > 2097152) {
-            $errors[] = "Image too large (max 2MB)";
-        } else {
-            $ext = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
-            $new_image = uniqid('service_') . '.' . $ext;
-            
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $target_dir . $new_image)) {
-                // Delete old image if not placeholder
-                if ($image_path && $image_path !== 'placeholder.jpg' && file_exists($target_dir . $image_path)) {
-                    unlink($target_dir . $image_path);
-                }
-                $image_path = $new_image;
-            } else {
-                $errors[] = "Failed to upload image";
-            }
+    if (empty($title) || empty($description) || empty($category) || empty($price) || empty($rate_type)) {
+        $message = "<div class='error'>All fields are required.</div>";
+    } else {
+        $update_sql = "UPDATE services SET title = ?, description = ?, category = ?, price = ?, rate_type = ? WHERE id = ? AND seller_id = ?";
+        $update_stmt = $conn->prepare($update_sql);
+        if (!$update_stmt) {
+            die("Prepare failed: " . $conn->error);
         }
-    }
-
-    // Update service if no errors
-    if (empty($errors)) {
-        $query = "UPDATE services SET title=?, category=?, description=?, price=?, rate_type=?, image_path=? WHERE id=? AND seller_id=?";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("sssdssii", $title, $category, $description, $price, $rate_type, $image_path, $service_id, $seller_id);
-        
-        if ($stmt->execute()) {
-            $_SESSION['success'] = "Service updated successfully";
-            header("Location: seller_services.php");
-            exit();
+        $update_stmt->bind_param("sssdsii", $title, $description, $category, $price, $rate_type, $service_id, $_SESSION['user_id']);
+        if ($update_stmt->execute()) {
+            $message = "<div class='success'>Service updated successfully.</div>";
+            // header("Location: seller_services.php");
+            // exit;
         } else {
-            $errors[] = "Error updating service: " . $stmt->error;
+            $message = "<div class='error'>Update failed: " . htmlspecialchars($update_stmt->error) . "</div>";
         }
-        $stmt->close();
     }
 }
 ?>
-
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Service - StrathConnect</title>
-    <link rel="stylesheet" href="../assets/style.css">
-    <link rel="stylesheet" href="../assets/css/services.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Edit Service</title>
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #f5f7fa;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            background: white;
+            padding: 2rem;
+            margin: 2rem auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #003366;
+            margin-bottom: 1.5rem;
+        }
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #003366;
+            font-weight: 600;
+        }
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        button {
+            background: #003366;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+        }
+        button:hover {
+            background: #004080;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 0.75rem;
+            border: 1px solid #c3e6cb;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 0.75rem;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+    </style>
 </head>
 <body>
-    
-    
-    <div class="dashboard-container">
-        
-        
-        <main class="dashboard-content">
-            <div class="dashboard-header">
-                <h1>Edit Service</h1>
-                <a href="seller_services.php" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Back
-                </a>
-            </div>
-            
-            <?php if (!empty($errors)): ?>
-                <div class="alert alert-error">
-                    <h3>Error:</h3>
-                    <ul>
-                        <?php foreach ($errors as $error): ?>
-                            <li><?= htmlspecialchars($error) ?></li>
-                        <?php endforeach; ?>
-                    </ul>
-                </div>
-            <?php endif; ?>
-            
-            <form class="service-form" method="POST" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label>Service Title*</label>
-                    <input type="text" name="title" value="<?= htmlspecialchars($service['title']) ?>" required>
-                </div>
-                
-                <div class="form-group">
-                    <label>Category*</label>
-                    <select name="category" required>
-                        <?php foreach ($categories as $cat): ?>
-                            <option value="<?= $cat ?>" <?= $service['category'] === $cat ? 'selected' : '' ?>>
-                                <?= $cat ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label>Description*</label>
-                    <textarea name="description" rows="5" required><?= htmlspecialchars($service['description']) ?></textarea>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Price (KSh)*</label>
-                        <input type="number" name="price" min="0" step="0.01" 
-                               value="<?= htmlspecialchars($service['price']) ?>" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Rate Type*</label>
-                        <select name="rate_type" required>
-                            <?php foreach ($rate_types as $rate): ?>
-                                <option value="<?= $rate ?>" <?= $service['rate_type'] === $rate ? 'selected' : '' ?>>
-                                    <?= ucfirst($rate) ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label>Current Image</label>
-                    <div class="current-image-preview">
-                        <img src="../assets/images/services/<?= htmlspecialchars($service['image_path'] ?? 'placeholder.jpg') ?>" 
-                             alt="Current service image">
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label>Update Image</label>
-                    <input type="file" name="image" accept="image/*">
-                    <p class="form-hint">Leave blank to keep current image (JPEG/PNG, max 2MB)</p>
-                </div>
-                
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save"></i> Save Changes
-                    </button>
-                    <a href="seller_services.php" class="btn btn-secondary">
-                        Cancel
-                    </a>
-                </div>
-            </form>
-        </main>
-    </div>
-    
-    
+<div class="container">
+    <h1>Edit Service</h1>
+    <?= $message ?>
+    <form method="POST">
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" id="title" name="title" value="<?= htmlspecialchars($service['title']) ?>" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" required><?= htmlspecialchars($service['description']) ?></textarea>
+        </div>
+        <div class="form-group">
+            <label for="category">Category</label>
+            <input type="text" id="category" name="category" value="<?= htmlspecialchars($service['category']) ?>" required>
+        </div>
+        <div class="form-group">
+            <label for="price">Price (Ksh)</label>
+            <input type="number" id="price" name="price" step="0.01" value="<?= htmlspecialchars($service['price']) ?>" required>
+        </div>
+        <div class="form-group">
+            <label for="rate_type">Rate Type</label>
+            <select id="rate_type" name="rate_type" required>
+                <option value="hourly" <?= $service['rate_type'] === 'hourly' ? 'selected' : '' ?>>Hourly</option>
+                <option value="fixed" <?= $service['rate_type'] === 'fixed' ? 'selected' : '' ?>>Fixed</option>
+                <option value="per_project" <?= $service['rate_type'] === 'per_project' ? 'selected' : '' ?>>Per Project</option>
+            </select>
+        </div>
+        <button type="submit">Update Service</button>
+    </form>
+</div>
 </body>
 </html>
-<?php $conn->close(); ?>
