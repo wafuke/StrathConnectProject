@@ -107,6 +107,7 @@ Images for signup and services pages
 Orders on seller side 
 Seller dashboard should automatically update
 Mpesa integration
+Check for errors in services homepage(should not redirect to a logged in services page)
 
 
 

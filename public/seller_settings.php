@@ -339,7 +339,7 @@ $conn->close();
     <nav class="navbar">
         <div class="logo">StrathConnect</div>
         <ul class="nav-links">
-            <li><a href="../public/index.php">Home</a></li>
+            
             <li><a href="seller_dashboard.php">Dashboard</a></li>
             <li><a href="seller_products.php">My Products</a></li>
             <li><a href="seller_services.php">My Services</a></li>
