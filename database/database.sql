@@ -98,3 +98,18 @@ ALTER TABLE users
 ADD COLUMN business_name VARCHAR(100),
 ADD COLUMN business_description TEXT,
 ADD COLUMN contact_number VARCHAR(20);
+
+CREATE TABLE user_addresses (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    full_name VARCHAR(100) NOT NULL,
+    address_line1 VARCHAR(255) NOT NULL,
+    address_line2 VARCHAR(255),
+    city VARCHAR(50) NOT NULL,
+    county VARCHAR(50) NOT NULL,
+    postal_code VARCHAR(20) NOT NULL,
+    country VARCHAR(50) NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    is_default BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
