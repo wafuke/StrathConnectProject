@@ -68,7 +68,6 @@ $orders = $result->fetch_all(MYSQLI_ASSOC);
             <li><a href="marketplace.php">Marketplace</a></li>
             <li><a href="services.php">Services</a></li>
             <li><a href="buyer_orders.php" class="active">My Orders</a></li>
-            <li><a href="buyer_messages.php">Messages</a></li>
             <li><a href="../public/login.php">Logout</a></li>
         </ul>
     </nav>
