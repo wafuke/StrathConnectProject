@@ -64,7 +64,7 @@ $orders = $result->fetch_all(MYSQLI_ASSOC);
    <nav class="navbar">
         <div class="logo">StrathConnect</div>
         <ul class="nav-links">
-            <li><a href="../public/index.php">Home</a></li>
+           
             <li><a href="marketplace.php">Marketplace</a></li>
             <li><a href="services.php">Services</a></li>
             <li><a href="buyer_orders.php" class="active">My Orders</a></li>

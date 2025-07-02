@@ -18,6 +18,15 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Get user profile data
+$user_id = $_SESSION['user_id'];
+$user_query = "SELECT username, profile_pic FROM users WHERE id = ?";
+$stmt = $conn->prepare($user_query);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$user_result = $stmt->get_result();
+$user_data = $user_result->fetch_assoc();
+
 // Get search and filter parameters
 $search = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
 $category = isset($_GET['category']) ? $conn->real_escape_string($_GET['category']) : '';
@@ -46,7 +55,6 @@ switch ($sort) {
         $query .= " ORDER BY p.price DESC";
         break;
     case 'popular':
-        // Would need a view count or sales count column for this
         $query .= " ORDER BY p.created_at DESC";
         break;
     default:
@@ -80,7 +88,7 @@ $conn->close();
     <nav class="navbar">
         <div class="logo">StrathConnect</div>
         <ul class="nav-links">
-            <li><a href="../public/index.php">Home</a></li>
+            
             <li><a href="marketplace.php" class="active">Marketplace</a></li>
             <li><a href="services.php">Services</a></li>
             <li><a href="buyer_orders.php">My Orders</a></li>
@@ -91,9 +99,9 @@ $conn->close();
     <div class="dashboard-container">
         <aside class="sidebar">
             <div class="profile-summary">
-                <img src="../assets/images/profile-placeholder.png" alt="Profile" class="profile-pic">
-                <h3><?php echo htmlspecialchars($_SESSION['username'] ?? 'Buyer'); ?></h3>
-                <p>@<?php echo htmlspecialchars($_SESSION['username'] ?? 'username'); ?></p>
+                <img src="<?php echo htmlspecialchars($user_data['profile_pic'] ?? '../assets/images/profile-placeholder.png'); ?>" alt="Profile" class="profile-pic">
+                <h3><?php echo htmlspecialchars($user_data['username'] ?? 'Buyer'); ?></h3>
+                <p>@<?php echo htmlspecialchars($user_data['username'] ?? 'username'); ?></p>
             </div>
             <nav class="sidebar-nav">
                 <a href="buyer_dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
@@ -161,7 +169,7 @@ $conn->close();
                                 <h3><?php echo htmlspecialchars($product['name']); ?></h3>
                                 <div class="price">KSh <?php echo number_format($product['price'], 2); ?></div>
                                 <div class="seller-info">
-                                    <img src="../assets/images/profile-placeholder.png" alt="Seller">
+                                    <img src="<?php echo htmlspecialchars($user_data['profile_pic'] ?? '../assets/images/profile-placeholder.png'); ?>" alt="Seller">
                                     <span>@<?php echo htmlspecialchars($product['seller_username']); ?></span>
                                 </div>
                                 <button class="add-to-cart" data-product-id="<?php echo $product['id']; ?>">

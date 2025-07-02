@@ -311,7 +311,7 @@ $conn->close();
     <nav class="navbar">
         <div class="logo">StrathConnect</div>
         <ul class="nav-links">
-            <li><a href="../public/index.php">Home</a></li>
+            <!-- <li><a href="../public/index.php">Home</a></li> -->
             <li><a href="marketplace.php">Marketplace</a></li>
             <li><a href="services.php">Services</a></li>
             <li><a href="buyer_orders.php">My Orders</a></li>
@@ -325,9 +325,6 @@ $conn->close();
                 <img src="<?php echo htmlspecialchars($profile_pic); ?>" alt="Profile" class="profile-pic">
                 <h3><?php echo htmlspecialchars($username); ?></h3>
                 <p>@<?php echo htmlspecialchars($username); ?></p>
-                <div class="wallet-balance">
-                    <i class="fas fa-wallet"></i> KSh 1,250
-                </div>
             </div>
             <nav class="sidebar-nav">
                 <a href="buyer_dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
@@ -403,69 +400,4 @@ $conn->close();
                                 <div class="password-strength-bar" id="passwordStrengthBar"></div>
                             </div>
                             <div class="password-hint">Password must be at least 8 characters long</div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="confirm_password">Confirm New Password</label>
-                            <input type="password" id="confirm_password" name="confirm_password" class="form-control" required>
-                        </div>
-                        
-                        <button type="submit" name="update_password" class="btn">Change Password</button>
-                    </form>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <footer class="footer">
-        <p>&copy; <?php echo date('Y'); ?> StrathConnect. All rights reserved.</p>
-    </footer>
-
-    <script>
-    // Preview profile picture before upload
-    document.getElementById('profile_pic').addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                document.getElementById('profilePicPreview').src = event.target.result;
-            }
-            reader.readAsDataURL(file);
-        }
-    });
-    
-    // Password strength indicator
-    document.getElementById('new_password').addEventListener('input', function() {
-        const password = this.value;
-        const strengthBar = document.getElementById('passwordStrengthBar');
-        let strength = 0;
-        
-        if (password.length >= 8) strength += 1;
-        if (password.length >= 12) strength += 1;
-        if (/[A-Z]/.test(password)) strength += 1;
-        if (/[0-9]/.test(password)) strength += 1;
-        if (/[^A-Za-z0-9]/.test(password)) strength += 1;
-        
-        // Update strength bar
-        if (strength <= 1) {
-            strengthBar.style.backgroundColor = '#dc3545';
-            strengthBar.style.width = '20%';
-        } else if (strength === 2) {
-            strengthBar.style.backgroundColor = '#fd7e14';
-            strengthBar.style.width = '40%';
-        } else if (strength === 3) {
-            strengthBar.style.backgroundColor = '#ffc107';
-            strengthBar.style.width = '60%';
-        } else if (strength === 4) {
-            strengthBar.style.backgroundColor = '#28a745';
-            strengthBar.style.width = '80%';
-        } else if (strength >= 5) {
-            strengthBar.style.backgroundColor = '#28a745';
-            strengthBar.style.width = '100%';
-        } else {
-            strengthBar.style.width = '0%';
-        }
-    });
-    </script>
-</body>
-</html>
+                        </d
