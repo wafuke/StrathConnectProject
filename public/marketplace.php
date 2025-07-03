@@ -46,7 +46,6 @@ if (!empty($category) && $category !== 'all') {
     $query .= " AND p.category = '$category'";
 }
 
-// Add sorting
 switch ($sort) {
     case 'price_low':
         $query .= " ORDER BY p.price ASC";
@@ -64,7 +63,6 @@ switch ($sort) {
 $result = $conn->query($query);
 $products = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
 
-// Get distinct categories for filter
 $categories = [];
 $cat_query = "SELECT DISTINCT category FROM products WHERE is_approved = 1";
 $cat_result = $conn->query($cat_query);
@@ -79,16 +77,83 @@ $conn->close();
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marketplace - StrathConnect</title>
     <link rel="stylesheet" href="../assets/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+    .add-to-cart {
+        background-color: #003366;
+        color: #fff;
+        border: none;
+        padding: 10px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background 0.3s ease, transform 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .add-to-cart i {
+        font-size: 16px;
+    }
+    .add-to-cart:hover {
+        background-color: #004080;
+        transform: translateY(-2px);
+    }
+    .sidebar .add-to-cart {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+    }
+    .form-control {
+        padding: 8px 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        width: 100%;
+    }
+    .search-filters {
+        margin-bottom: 20px;
+    }
+    .filter-form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .search-bar-row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+    .search-bar-row input[type="text"] {
+        flex-grow: 1;
+    }
+    .cart-summary {
+        margin-left: auto;
+    }
+    .filter-options-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    .seller-info img {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 6px;
+    }
+    .seller-info {
+        display: flex;
+        align-items: center;
+        margin-top: 5px;
+    }
+    </style>
 </head>
 <body>
     <nav class="navbar">
         <div class="logo">StrathConnect</div>
         <ul class="nav-links">
-            
             <li><a href="marketplace.php" class="active">Marketplace</a></li>
             <li><a href="services.php">Services</a></li>
             <li><a href="buyer_orders.php">My Orders</a></li>
@@ -111,45 +176,49 @@ $conn->close();
                 <a href="buyer_wishlist.php"><i class="fas fa-heart"></i> Wishlist</a>
                 <a href="buyer_settings.php"><i class="fas fa-cog"></i> Settings</a>
             </nav>
+            <button class="add-to-cart"><i class="fas fa-cart-plus"></i> Quick Add to Cart</button>
         </aside>
 
         <main class="dashboard-content">
-            <div class="marketplace-header">
-                <h1>Marketplace</h1>
-                <div class="cart-summary">
-                    <a href="buyer_cart.php" class="cart-link">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span class="cart-count">0</span>
-                    </a>
-                </div>
-            </div>
-            
+            <h1>Marketplace</h1>
+
             <section class="search-filters">
                 <form method="GET" class="filter-form">
-                    <div class="filter-group">
-                        <label for="category">Category:</label>
-                        <select name="category" id="category">
-                            <option value="all">All Categories</option>
-                            <?php foreach ($categories as $cat): ?>
-                                <option value="<?php echo htmlspecialchars($cat['category']); ?>"
-                                    <?php echo (isset($_GET['category']) && $_GET['category'] === $cat['category']) ? 'selected' : ''; ?>>
-                                    <?php echo htmlspecialchars($cat['category']); ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
+                    <div class="search-bar-row">
+                        <input type="text" name="search" value="<?php echo htmlspecialchars($search); ?>" placeholder="Search products..." class="form-control">
+                        <div class="cart-summary">
+                            <a href="buyer_cart.php" class="cart-link">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span class="cart-count">0</span>
+                            </a>
+                        </div>
                     </div>
-                    
-                    <div class="filter-group">
-                        <label for="sort">Sort By:</label>
-                        <select name="sort" id="sort">
-                            <option value="newest" <?php echo ($sort === 'newest') ? 'selected' : ''; ?>>Newest</option>
-                            <option value="price_low" <?php echo ($sort === 'price_low') ? 'selected' : ''; ?>>Price: Low to High</option>
-                            <option value="price_high" <?php echo ($sort === 'price_high') ? 'selected' : ''; ?>>Price: High to Low</option>
-                            <option value="popular" <?php echo ($sort === 'popular') ? 'selected' : ''; ?>>Most Popular</option>
-                        </select>
+                    <div class="filter-options-row">
+                        <div class="filter-group">
+                            <label for="category">Category:</label>
+                            <select name="category" id="category" class="form-control">
+                                <option value="all">All Categories</option>
+                                <?php foreach ($categories as $cat): ?>
+                                    <option value="<?php echo htmlspecialchars($cat['category']); ?>"
+                                        <?php echo ($category === $cat['category']) ? 'selected' : ''; ?>>
+                                        <?php echo htmlspecialchars($cat['category']); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="sort">Sort By:</label>
+                            <select name="sort" id="sort" class="form-control">
+                                <option value="newest" <?php echo ($sort === 'newest') ? 'selected' : ''; ?>>Newest</option>
+                                <option value="price_low" <?php echo ($sort === 'price_low') ? 'selected' : ''; ?>>Price: Low to High</option>
+                                <option value="price_high" <?php echo ($sort === 'price_high') ? 'selected' : ''; ?>>Price: High to Low</option>
+                                <option value="popular" <?php echo ($sort === 'popular') ? 'selected' : ''; ?>>Most Popular</option>
+                            </select>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn-apply">Apply Filters</button>
+                        </div>
                     </div>
-                    
-                    <button type="submit" class="btn-apply">Apply Filters</button>
                 </form>
             </section>
 
@@ -164,8 +233,7 @@ $conn->close();
                     <div class="products-grid">
                         <?php foreach ($products as $product): ?>
                             <div class="product-card">
-                                <img src="../assets/images/products/<?php echo htmlspecialchars($product['image_path'] ?? 'placeholder.jpg'); ?>" 
-                                     alt="<?php echo htmlspecialchars($product['name']); ?>">
+                                <img src="../assets/images/products/<?php echo htmlspecialchars($product['image_path'] ?? 'placeholder.jpg'); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
                                 <h3><?php echo htmlspecialchars($product['name']); ?></h3>
                                 <div class="price">KSh <?php echo number_format($product['price'], 2); ?></div>
                                 <div class="seller-info">
@@ -173,11 +241,9 @@ $conn->close();
                                     <span>@<?php echo htmlspecialchars($product['seller_username']); ?></span>
                                 </div>
                                 <button class="add-to-cart" data-product-id="<?php echo $product['id']; ?>">
-                                    Add to Cart
+                                    <i class="fas fa-cart-plus"></i> Add to Cart
                                 </button>
-                                <a href="product_detail.php?id=<?php echo $product['id']; ?>" class="btn-view-details">
-                                    View Details
-                                </a>
+                                <a href="product_detail.php?id=<?php echo $product['id']; ?>" class="btn-view-details">View Details</a>
                                 <button class="add-to-wishlist" data-product-id="<?php echo $product['id']; ?>">
                                     <i class="far fa-heart"></i>
                                 </button>
@@ -194,15 +260,13 @@ $conn->close();
     </footer>
 
     <script>
-    // Add to cart functionality
     document.querySelectorAll('.add-to-cart').forEach(button => {
         button.addEventListener('click', function() {
             const productId = this.getAttribute('data-product-id');
+            if (!productId) return; // Ignore sidebar button
             fetch('add_to_cart.php', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: `product_id=${productId}`
             })
             .then(response => response.json())
@@ -217,15 +281,12 @@ $conn->close();
         });
     });
 
-    // Add to wishlist functionality
     document.querySelectorAll('.add-to-wishlist').forEach(button => {
         button.addEventListener('click', function() {
             const productId = this.getAttribute('data-product-id');
             fetch('add_to_wishlist.php', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: `product_id=${productId}`
             })
             .then(response => response.json())
@@ -239,12 +300,10 @@ $conn->close();
         });
     });
 
-    // Function to update cart count
     function updateCartCount(count) {
         document.querySelector('.cart-count').textContent = count;
     }
 
-    // Get initial cart count
     fetch('get_cart_count.php')
         .then(response => response.json())
         .then(data => {
