@@ -176,7 +176,7 @@ $conn->close();
                 <a href="buyer_wishlist.php"><i class="fas fa-heart"></i> Wishlist</a>
                 <a href="buyer_settings.php"><i class="fas fa-cog"></i> Settings</a>
             </nav>
-            <button class="add-to-cart"><i class="fas fa-cart-plus"></i> Quick Add to Cart</button>
+            
         </aside>
 
         <main class="dashboard-content">
