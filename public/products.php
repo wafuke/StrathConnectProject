@@ -248,7 +248,7 @@ $filtered_products = array_filter($products, function($product) use ($search, $c
             <ul class="nav-links">
                 <li><a href="../public/index.php">Home</a></li>
                 <li><a href="../public/products.php" class="active">Products</a></li>
-                <li><a href="../public/services.php">Services</a></li>
+                <li><a href="../public/services_home.php">Services</a></li>
                 <li><a href="../public/login.php" class="login-btn">Login</a></li>
             </ul>
         </nav>
