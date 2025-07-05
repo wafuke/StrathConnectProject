@@ -154,6 +154,9 @@ $filtered_products = array_filter($products, function($product) use ($search, $c
       overflow: hidden;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
       transition: transform 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
 
     .product-card:hover {
@@ -175,7 +178,8 @@ $filtered_products = array_filter($products, function($product) use ($search, $c
     }
 
     .product-details {
-      padding: 1.5rem;
+      padding: 1rem;
+      flex-grow: 1;
     }
 
     .product-title {
@@ -204,6 +208,24 @@ $filtered_products = array_filter($products, function($product) use ($search, $c
     .product-seller {
       font-size: 0.9rem;
       color: #666;
+      margin-bottom: 0.5rem;
+    }
+
+    .btn-view {
+      display: inline-block;
+      background: var(--secondary);
+      color: var(--dark);
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 0.5rem;
+      transition: background 0.3s ease;
+    }
+
+    .btn-view:hover {
+      background: #e6b800;
     }
 
     .empty-state {
@@ -308,6 +330,9 @@ $filtered_products = array_filter($products, function($product) use ($search, $c
               <div class="product-price">KSh <?= number_format($product['price'], 2) ?></div>
               <p class="product-description"><?= htmlspecialchars(substr($product['description'], 0, 100)) ?>...</p>
               <p class="product-seller">Sold by: <?= htmlspecialchars($product['username']) ?></p>
+              <a href="product_detail_home.php?id=<?= $product['id'] ?>" class="btn-view">
+                <i class="fas fa-eye"></i> View Details
+              </a>
             </div>
           </div>
         <?php endforeach; ?>
