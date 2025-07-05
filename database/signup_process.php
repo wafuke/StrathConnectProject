@@ -46,6 +46,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors[] = "Password must be at least 8 characters.";
     }
 
+    // Check if max admins reached
+    if ($type === 'admin') {
+        $admin_sql = "SELECT COUNT(*) AS admin_count FROM users WHERE user_type = 'admin'";
+        $admin_result = $conn->query($admin_sql);
+        $admin_data = $admin_result->fetch_assoc();
+        if ($admin_data['admin_count'] >= 2) {
+            $errors[] = "Cannot register as an admin. Maximum number of admins reached.";
+        }
+    }
+
     if (!empty($errors)) {
         $_SESSION['signup_errors'] = $errors;
         header("Location: ../public/signup.php");
