@@ -51,13 +51,12 @@ if ($conn->connect_error) {
             <form class="auth-form" action="../database/login_process.php" method="POST">
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="student@strathmore.edu" required>
+                    <input type="email" id="email" name="email" placeholder="Example@gmail.com" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="password">Password</label>
                     <input type="password" id="password" name="password" placeholder="••••••••" required>
-                    <a href="#" class="forgot-password">Forgot password?</a>
                 </div>
                 
                 <button type="submit" class="auth-btn">Login</button>
