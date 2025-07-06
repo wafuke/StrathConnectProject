@@ -46,7 +46,7 @@ $service = $result->fetch_assoc();
 
 // Fetch related services from same seller
 $related_services = [];
-$related_query = "SELECT id, title, price, image_path 
+$related_query = "SELECT id, title, price 
                  FROM services 
                  WHERE seller_id = ? AND id != ? AND is_approved = 1
                  LIMIT 4";
@@ -94,15 +94,14 @@ $conn->close();
         .service-gallery {
             flex: 1;
             min-width: 300px;
-        }
-        
-        .main-image {
-            width: 100%;
-            max-height: 400px;
-            object-fit: contain;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 300px;
+            background: #f5f5f5;
             border-radius: 8px;
-            margin-bottom: 15px;
-            border: 1px solid #eee;
+            font-size: 100px;
+            color: #ccc;
         }
         
         .service-info {
@@ -216,6 +215,12 @@ $conn->close();
             transition: transform 0.3s;
             text-decoration: none;
             color: inherit;
+            padding: 20px;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
         
         .related-card:hover {
@@ -223,45 +228,20 @@ $conn->close();
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
         
-        .related-card img {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
+        .related-icon {
+            font-size: 60px;
+            color: #ccc;
+            margin-bottom: 10px;
         }
         
         .related-details {
-            padding: 15px;
+            text-align: center;
         }
         
         .related-price {
             font-weight: bold;
             color: #FF9900;
             margin-top: 5px;
-        }
-        
-        .rating {
-            color: #FF9900;
-            margin: 10px 0;
-        }
-        
-        .service-details-section {
-            background: white;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
-        
-        .detail-item {
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        
-        .detail-label {
-            font-weight: bold;
-            color: #555;
-            margin-bottom: 5px;
         }
         
         @media (max-width: 768px) {
@@ -295,30 +275,12 @@ $conn->close();
             <div class="service-detail-container">
                 <div class="service-header">
                     <div class="service-gallery">
-                        <img src="../assets/images/services/<?php echo htmlspecialchars($service['image_path'] ?? 'service-placeholder.jpg'); ?>" 
-                             alt="<?php echo htmlspecialchars($service['title']); ?>" class="main-image">
+                        <i class="fas fa-concierge-bell"></i>
                     </div>
                     
                     <div class="service-info">
                         <h1 class="service-title"><?php echo htmlspecialchars($service['title']); ?></h1>
                         <div class="service-price">KSh <?php echo number_format($service['price'], 2); ?></div>
-                        
-                        <div class="rating">
-                            <?php 
-                            $rating = isset($service['rating']) ? (float)$service['rating'] : 0;
-                            $review_count = isset($service['review_count']) ? (int)$service['review_count'] : 0;
-                            
-                            for ($i = 1; $i <= 5; $i++): 
-                                if ($i <= floor($rating)): ?>
-                                    <i class="fas fa-star"></i>
-                                <?php elseif ($i - 0.5 <= $rating): ?>
-                                    <i class="fas fa-star-half-alt"></i>
-                                <?php else: ?>
-                                    <i class="far fa-star"></i>
-                                <?php endif; ?>
-                            <?php endfor; ?>
-                            <span>(<?php echo $review_count; ?> reviews)</span>
-                        </div>
                         
                         <div class="seller-info">
                             <img src="<?php echo htmlspecialchars($service['seller_profile'] ?? '../assets/images/profile-placeholder.png'); ?>" 
@@ -360,52 +322,13 @@ $conn->close();
                     </div>
                 </div>
                 
-                <div class="service-details-section">
-                    <h2>Service Details</h2>
-                    <div class="detail-item">
-                        <div class="detail-label">Category</div>
-                        <div><?php echo htmlspecialchars($service['category']); ?></div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Pricing Type</div>
-                        <div>
-                            <?php 
-                            $rate_type = isset($service['rate_type']) ? $service['rate_type'] : 'fixed';
-                            switch($rate_type) {
-                                case 'hourly': echo 'Hourly Rate'; break;
-                                case 'fixed': echo 'Fixed Price'; break;
-                                case 'per_project': echo 'Per Project'; break;
-                                default: echo htmlspecialchars($rate_type);
-                            }
-                            ?>
-                        </div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Delivery Time</div>
-                        <div><?php 
-                            echo isset($service['delivery_time']) && !empty($service['delivery_time']) 
-                                ? htmlspecialchars($service['delivery_time']) 
-                                : 'Not specified'; 
-                        ?></div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Availability</div>
-                        <div><?php 
-                            echo isset($service['availability']) && !empty($service['availability']) 
-                                ? htmlspecialchars($service['availability']) 
-                                : 'Available'; 
-                        ?></div>
-                    </div>
-                </div>
-                
                 <?php if (!empty($related_services)): ?>
                     <div class="related-services">
                         <h3 class="related-title">More Services from This Seller</h3>
                         <div class="related-grid">
                             <?php foreach ($related_services as $related): ?>
                                 <a href="service_detail.php?id=<?php echo $related['id']; ?>" class="related-card">
-                                    <img src="../assets/images/services/<?php echo htmlspecialchars($related['image_path'] ?? 'service-placeholder.jpg'); ?>" 
-                                         alt="<?php echo htmlspecialchars($related['title']); ?>">
+                                    <div class="related-icon"><i class="fas fa-concierge-bell"></i></div>
                                     <div class="related-details">
                                         <h4><?php echo htmlspecialchars($related['title']); ?></h4>
                                         <div class="related-price">KSh <?php echo number_format($related['price'], 2); ?></div>
