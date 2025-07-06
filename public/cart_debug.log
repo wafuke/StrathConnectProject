@@ -86,3 +86,55 @@ Array
 (
     [product_id] => 1
 )
+Array
+(
+    [service_id] => 1
+)
+Array
+(
+    [item_type] => service
+    [service_id] => 1
+    [quantity] => 1
+)
+Array
+(
+    [service_id] => 1
+)
+Array
+(
+    [service_id] => 1
+)
+Array
+(
+    [item_type] => service
+    [service_id] => 1
+    [quantity] => 1
+)
+Array
+(
+    [item_type] => service
+    [service_id] => 1
+    [quantity] => 1
+)
+Array
+(
+    [item_type] => service
+    [service_id] => 1
+    [quantity] => 1
+)
+Array
+(
+    [item_type] => service
+    [service_id] => 1
+    [quantity] => 1
+)
+Array
+(
+    [product_id] => 1
+)
+Array
+(
+    [item_type] => service
+    [service_id] => 1
+    [quantity] => 1
+)

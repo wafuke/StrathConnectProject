@@ -22,7 +22,7 @@ $query = "SELECT s.*, u.username as seller_username, u.profile_pic as seller_pro
           FROM services s
           JOIN users u ON s.seller_id = u.id
           WHERE s.id = ? AND s.is_approved = 1";
-          
+
 if (!$stmt = $conn->prepare($query)) {
     die("Error preparing query: " . $conn->error);
 }
@@ -50,7 +50,7 @@ $related_query = "SELECT id, title, price
                  FROM services 
                  WHERE seller_id = ? AND id != ? AND is_approved = 1
                  LIMIT 4";
-                 
+
 if (!$stmt = $conn->prepare($related_query)) {
     die("Error preparing related services query: " . $conn->error);
 }
@@ -83,14 +83,14 @@ $conn->close();
             margin: 0 auto;
             padding: 20px;
         }
-        
+
         .service-header {
             display: flex;
             gap: 30px;
             margin-bottom: 40px;
             flex-wrap: wrap;
         }
-        
+
         .service-gallery {
             flex: 1;
             min-width: 300px;
@@ -103,32 +103,25 @@ $conn->close();
             font-size: 100px;
             color: #ccc;
         }
-        
+
         .service-info {
             flex: 1;
             min-width: 300px;
         }
-        
+
         .service-title {
             font-size: 28px;
             margin-bottom: 10px;
             color: #333;
         }
-        
+
         .service-price {
             font-size: 24px;
             font-weight: bold;
             color: #FF9900;
             margin-bottom: 15px;
         }
-        
-        .service-meta {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        
+
         .seller-info {
             display: flex;
             align-items: center;
@@ -138,27 +131,27 @@ $conn->close();
             background: #f9f9f9;
             border-radius: 8px;
         }
-        
+
         .seller-avatar {
             width: 50px;
             height: 50px;
             border-radius: 50%;
             object-fit: cover;
         }
-        
+
         .service-description {
             margin-bottom: 30px;
             line-height: 1.6;
             white-space: pre-line;
         }
-        
+
         .action-buttons {
             display: flex;
             gap: 15px;
             margin-top: 30px;
             flex-wrap: wrap;
         }
-        
+
         .btn {
             padding: 12px 24px;
             border-radius: 4px;
@@ -169,45 +162,45 @@ $conn->close();
             display: inline-block;
             text-decoration: none;
         }
-        
+
         .btn-primary {
             background-color: #FF9900;
             color: white;
             border: none;
         }
-        
+
         .btn-primary:hover {
             background-color: #e68a00;
         }
-        
+
         .btn-outline {
             background-color: transparent;
             border: 2px solid #FF9900;
             color: #FF9900;
         }
-        
+
         .btn-outline:hover {
             background-color: #FF9900;
             color: white;
         }
-        
+
         .related-services {
             margin-top: 50px;
         }
-        
+
         .related-title {
             font-size: 24px;
             margin-bottom: 20px;
             border-bottom: 1px solid #eee;
             padding-bottom: 10px;
         }
-        
+
         .related-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 20px;
         }
-        
+
         .related-card {
             border: 1px solid #eee;
             border-radius: 8px;
@@ -222,37 +215,37 @@ $conn->close();
             align-items: center;
             justify-content: center;
         }
-        
+
         .related-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
-        
+
         .related-icon {
             font-size: 60px;
             color: #ccc;
             margin-bottom: 10px;
         }
-        
+
         .related-details {
             text-align: center;
         }
-        
+
         .related-price {
             font-weight: bold;
             color: #FF9900;
             margin-top: 5px;
         }
-        
+
         @media (max-width: 768px) {
             .service-header {
                 flex-direction: column;
             }
-            
+
             .action-buttons {
                 flex-direction: column;
             }
-            
+
             .btn {
                 width: 100%;
             }
@@ -277,19 +270,19 @@ $conn->close();
                     <div class="service-gallery">
                         <i class="fas fa-concierge-bell"></i>
                     </div>
-                    
+
                     <div class="service-info">
                         <h1 class="service-title"><?php echo htmlspecialchars($service['title']); ?></h1>
                         <div class="service-price">KSh <?php echo number_format($service['price'], 2); ?></div>
-                        
+
                         <div class="seller-info">
-                            <img src="<?php echo htmlspecialchars($service['seller_profile'] ?? '../assets/images/profile-placeholder.png'); ?>" 
+                            <img src="<?php echo htmlspecialchars($service['seller_profile'] ?? '../assets/images/profile-placeholder.png'); ?>"
                                  alt="<?php echo htmlspecialchars($service['seller_username']); ?>" class="seller-avatar">
                             <div>
-                                <div class="seller-name"><?php 
-                                    echo !empty($service['business_name']) 
-                                        ? htmlspecialchars($service['business_name']) 
-                                        : '@' . htmlspecialchars($service['seller_username']); 
+                                <div class="seller-name"><?php
+                                    echo !empty($service['business_name'])
+                                        ? htmlspecialchars($service['business_name'])
+                                        : '@' . htmlspecialchars($service['seller_username']);
                                 ?></div>
                                 <?php if (!empty($service['contact_number'])): ?>
                                     <div class="seller-contact">
@@ -298,19 +291,21 @@ $conn->close();
                                 <?php endif; ?>
                             </div>
                         </div>
-                        
+
                         <div class="service-description">
                             <?php echo nl2br(htmlspecialchars($service['description'])); ?>
                         </div>
-                        
+
                         <div class="action-buttons">
                             <form action="add_to_cart.php" method="post" style="display: inline;">
+                                <input type="hidden" name="item_type" value="service">
                                 <input type="hidden" name="service_id" value="<?php echo $service['id']; ?>">
+                                <input type="hidden" name="quantity" value="1">
                                 <button type="submit" class="btn btn-outline">
                                     <i class="fas fa-cart-plus"></i> Add to Cart
                                 </button>
                             </form>
-                            
+
                             <form action="checkout.php" method="post" style="display: inline;">
                                 <input type="hidden" name="service_id" value="<?php echo $service['id']; ?>">
                                 <input type="hidden" name="quantity" value="1">
@@ -321,7 +316,7 @@ $conn->close();
                         </div>
                     </div>
                 </div>
-                
+
                 <?php if (!empty($related_services)): ?>
                     <div class="related-services">
                         <h3 class="related-title">More Services from This Seller</h3>

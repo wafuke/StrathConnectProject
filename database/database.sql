@@ -113,3 +113,7 @@ CREATE TABLE user_addresses (
     is_default BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+ALTER TABLE cart 
+MODIFY product_id INT NULL, 
+ADD COLUMN item_type VARCHAR(20) NOT NULL AFTER buyer_id, 
+ADD COLUMN item_id INT NOT NULL AFTER item_type;

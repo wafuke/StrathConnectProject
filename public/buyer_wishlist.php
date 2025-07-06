@@ -231,7 +231,7 @@ $conn->close();
                 <a href="marketplace.php"><i class="fas fa-store"></i> Marketplace</a>
                 <a href="services.php"><i class="fas fa-concierge-bell"></i> Services</a>
                 <a href="buyer_orders.php"><i class="fas fa-shopping-bag"></i> My Orders</a>
-                <a href="buyer_messages.php"><i class="fas fa-envelope"></i> Messages</a>
+                
                 <a href="buyer_wishlist.php" class="active"><i class="fas fa-heart"></i> Wishlist</a>
                 <a href="buyer_settings.php"><i class="fas fa-cog"></i> Settings</a>
             </nav>
